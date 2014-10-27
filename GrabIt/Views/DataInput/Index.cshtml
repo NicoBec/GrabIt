@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "DataInput";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+       
+        $("#datepicker").datepicker({ dateFormat: 'dd-mm-yy' });
+
+        var myDate = new Date();
+        var prettyDate = myDate.getDate() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getFullYear();
+        $("#datepicker").val(prettyDate);
+        console.log("$(document).ready(function () {");
+        $("#BtnAddShift").click(function () {
+            console.log("Ja Nee");
+            $.ajax({
+                url: '@(Url.Action("ProcessAddView", "DataInput"))',
+                data: {},
+                success: function (data) {
+                    $("#ProcessBlock").html(data);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert('Failed to retrieve books.');
+                }
+            });
+        });
+    });
+
+
+
+</script>
+
+<h2>DataInput</h2>
+<p>Some Text to start with :)</p>
+
+<p>Date: <input type="text" id="datepicker"></p>
+@{Html.RenderAction("ProcessAddedlist", "DataInput");}
+
+<input id="BtnAddShift" type="button" value="Add Shift"  />
+
+
+<div id="ProcessBlock"></div>

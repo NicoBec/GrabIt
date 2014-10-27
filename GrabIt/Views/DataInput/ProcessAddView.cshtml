@@ -1,0 +1,16 @@
+﻿
+<span>This is the Process Add View</span>
+<br />
+
+
+@{Html.RenderAction("GetShiftType", "DataInput");}<br />
+Please enter the shift start time
+<input id="TxtStartTime" type="text" /><br /><br />
+Please enter the shift end time
+<input id="TxtEndTime" type="text" /><br /><br />
+
+@{Html.RenderAction("GetProcessCat", "DataInput");}<br />
+<div id="DivProcessType"></div>
+@*@{Html.RenderAction("GetProcessType", "DataInput");}<br />*@
+
+<input id="BtnAddProcess" type="button" value="Add" />

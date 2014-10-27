@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="4f3e107240be48d4ae81ca704c293b52" Name="Diagram1">
+        <EntityTypeShape EntityType="GrabItModel.C__MigrationHistory" Width="1.5" PointX="7.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="GrabItModel.AspNetRole" Width="1.5" PointX="8.75" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="GrabItModel.AspNetUserClaim" Width="1.5" PointX="13.25" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="GrabItModel.AspNetUserLogin" Width="1.5" PointX="13.25" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="GrabItModel.AspNetUser" Width="1.5" PointX="11" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="GrabItModel.CATEGORy" Width="1.5" PointX="6" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="GrabItModel.MEASUREMENTLINK" Width="1.5" PointX="5.25" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="GrabItModel.MEASUREMENT" Width="1.5" PointX="10.5" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="GrabItModel.MEASUREMENTTYPE" Width="1.5" PointX="8.25" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="GrabItModel.PROCESSCATEGORy" Width="1.5" PointX="0.75" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="GrabItModel.PROCESS" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="GrabItModel.PROCESSTYPE" Width="1.5" PointX="3" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="GrabItModel.SHIFTTYPE" Width="1.5" PointX="3" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="GrabItModel.sysdiagram" Width="1.5" PointX="10.75" PointY="6.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="GrabItModel.USER" Width="1.5" PointX="3" PointY="9" IsExpanded="true" />
+        <AssociationConnector Association="GrabItModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="GrabItModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="GrabItModel.FK_MEASUREMENTTYPES_CATEGORIES" ManuallyRouted="false" />
+        <AssociationConnector Association="GrabItModel.FK_MEASUREMENTLINK_MEASUREMENTTYPES" ManuallyRouted="false" />
+        <AssociationConnector Association="GrabItModel.FK_MEASUREMENTLINK_PROCESSTYPES" ManuallyRouted="false" />
+        <AssociationConnector Association="GrabItModel.FK_MEASUREMENTS_MEASUREMENTTYPES" ManuallyRouted="false" />
+        <AssociationConnector Association="GrabItModel.FK_MEASUREMENTS_PROCESSES" ManuallyRouted="false" />
+        <AssociationConnector Association="GrabItModel.FK_MEASUREMENTTYPES_PROCESSTYPES" ManuallyRouted="false" />
+        <AssociationConnector Association="GrabItModel.FK_PROCESSTYPES_PROCESSCATEGORIES" ManuallyRouted="false" />
+        <AssociationConnector Association="GrabItModel.FK_PROCESSES_PROCESSTYPES" ManuallyRouted="false" />
+        <AssociationConnector Association="GrabItModel.FK_PROCESSES_SHIFTTYPES" ManuallyRouted="false" />
+        <AssociationConnector Association="GrabItModel.FK_PROCESSES_USERS" ManuallyRouted="false" />
+        <AssociationConnector Association="GrabItModel.AspNetUserRoles" ManuallyRouted="false" />
+        <AssociationConnector Association="GrabItModel.PROCESSLINK" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="GrabItModel.ProcessesView" Width="1.5" PointX="0.75" PointY="11.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

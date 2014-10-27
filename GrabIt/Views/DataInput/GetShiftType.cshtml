@@ -1,0 +1,10 @@
+﻿@model IEnumerable<GrabIt.Models.SHIFTTYPE>
+
+<span>Please select the shift type</span>
+<select id="SelShiftType">
+    <option value="">Please Select</option>
+@foreach (var item in Model)
+{
+    <option value="@Html.DisplayFor(modelItem => item.ShiftTypeID)">@Html.DisplayFor(modelItem => item.Desc)</option>
+}
+</select><br />

@@ -1,0 +1,32 @@
+﻿@model IEnumerable<GrabIt.Models.PROCESSCATEGORy>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#SelCatType").change(function () {
+            $.ajax({
+                url: '@(Url.Action("GetProcessType", "DataInput"))',
+                data: { catID: $("#SelCatType").val() },
+                success: function (data) {
+                    $("#DivProcessType").html(data);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert('Failed to retrieve books.');
+                }
+            });
+        });
+    });
+
+
+
+</script>
+
+
+<span>Please select the process category</span>
+<select id="SelCatType">
+    <option value="">Please Select</option>
+    @foreach (var item in Model)
+    {
+        <option value="@Html.DisplayFor(modelItem => item.ProcessCategoryID)">@Html.DisplayFor(modelItem => item.Desc)</option>
+    }
+</select><br />
