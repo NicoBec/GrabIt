@@ -1,10 +1,14 @@
 ﻿@model IEnumerable<GrabIt.Models.PROCESSTYPE>
 
-<span>Please select the process type</span>
-<select id="SelProcessType">
-    <option value="">Please Select</option>
-    @foreach (var item in Model)
-    {
-        <option value="@Html.DisplayFor(modelItem => item.ProcessTypeID)">@Html.DisplayFor(modelItem => item.Desc)</option>
-    }
-</select><br />
+<div class="form-group">
+    <label class="col-sx-2 control-label" for="SelProcessType">Process Type:</label>
+    <div class="col-sx-10">
+        <select id="SelProcessType" class="form-control">
+            <option value="">Please Select</option>
+            @foreach (var item in Model)
+            {
+                <option value="@Html.DisplayFor(modelItem => item.ProcessTypeID)">@Html.DisplayFor(modelItem => item.Desc)</option>
+            }
+        </select>
+    </div>
+</div>

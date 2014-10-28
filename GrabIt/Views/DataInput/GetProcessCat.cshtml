@@ -21,12 +21,15 @@
 
 </script>
 
-
-<span>Please select the process category</span>
-<select id="SelCatType">
-    <option value="">Please Select</option>
-    @foreach (var item in Model)
-    {
-        <option value="@Html.DisplayFor(modelItem => item.ProcessCategoryID)">@Html.DisplayFor(modelItem => item.Desc)</option>
-    }
-</select><br />
+<div class="form-group">
+    <label class="col-sx-2 control-label" for="SelCatType">Process Category: </label>
+    <div class="col-sx-10">
+        <select id="SelCatType" class="form-control">
+            <option value="">Please Select</option>
+            @foreach (var item in Model)
+            {
+                <option value="@Html.DisplayFor(modelItem => item.ProcessCategoryID)">@Html.DisplayFor(modelItem => item.Desc)</option>
+            }
+        </select>
+    </div>
+</div>

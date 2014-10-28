@@ -34,3 +34,12 @@ textarea {
         padding: 10px 15px;
     }
 }
+
+div.horizontalRule {
+    min-height: 1px;
+    clear:both; width:100%;
+    border-bottom:1px solid #d1d1d1;
+    height:1px; padding-top:5px;
+    margin-top:15px;
+    margin-bottom:15px;
+}

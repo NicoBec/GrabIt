@@ -1,26 +1,34 @@
 ﻿@model IEnumerable<GrabIt.Models.ProcessesView>
-@Styles.Render("~/Content/css")
-<table>
-    <tr>
-        <th> @Html.DisplayNameFor(model => model.Date)</th>
-        <th> @Html.DisplayNameFor(model => model.Shift)</th>
-        <th> @Html.DisplayNameFor(model => model.StartTime)</th>
-        <th> @Html.DisplayNameFor(model => model.EndTime)</th>
-        <th> @Html.DisplayNameFor(model => model.Desc)</th>
-        <th> @Html.DisplayNameFor(model => model.UserName)</th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        string date = item.Date.ToString("dd-MM-yyyy");
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#ProcessList').dataTable();
+    });
+</script>
+<br />
+<table id="ProcessList" class="table table-striped table-bordered" cellspacing="0" width="100%">
+    <thead>
         <tr>
-            <td> @date</td>
-            <td> @Html.DisplayFor(modelItem => item.Shift)</td>
-            <td> @Html.DisplayFor(modelItem => item.StartTime)</td>
-            <td> @Html.DisplayFor(modelItem => item.EndTime)</td>
-            <td> @Html.DisplayFor(modelItem => item.Desc)</td>
-            <td> @Html.DisplayFor(modelItem => item.UserName)</td>
-
+            <th> @Html.DisplayNameFor(model => model.Date)</th>
+            <th> @Html.DisplayNameFor(model => model.Shift)</th>
+            <th> @Html.DisplayNameFor(model => model.StartTime)</th>
+            <th> @Html.DisplayNameFor(model => model.EndTime)</th>
+            <th> @Html.DisplayNameFor(model => model.Desc)</th>
+            <th> @Html.DisplayNameFor(model => model.UserName)</th>
         </tr>
-    }
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            string date = item.Date.ToString("dd-MM-yyyy");
+            <tr>
+                <td> @date</td>
+                <td> @Html.DisplayFor(modelItem => item.Shift)</td>
+                <td> @Html.DisplayFor(modelItem => item.StartTime)</td>
+                <td> @Html.DisplayFor(modelItem => item.EndTime)</td>
+                <td> @Html.DisplayFor(modelItem => item.Desc)</td>
+                <td> @Html.DisplayFor(modelItem => item.UserName)</td>
+
+            </tr>
+        }
+    </tbody>
 </table>

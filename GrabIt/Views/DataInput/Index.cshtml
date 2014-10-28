@@ -6,7 +6,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-       
+
         $("#datepicker").datepicker({ dateFormat: 'dd-mm-yy' });
 
         var myDate = new Date();
@@ -33,12 +33,18 @@
 </script>
 
 <h2>DataInput</h2>
-<p>Some Text to start with :)</p>
+<h4>Here you can capture the shift info</h4>
+<div style="margin-left:15px;">
+    <div class="form-group">
+        <label class="col-sx-2 control-label" for="TxtEndTime">Date:</label>
+        <div class="col-sx-10">
+            <input id="datepicker" type="text" class="form-control" />
+        </div>
+    </div>
 
-<p>Date: <input type="text" id="datepicker"></p>
-@{Html.RenderAction("ProcessAddedlist", "DataInput");}
+    @{Html.RenderAction("ProcessAddedlist", "DataInput");}
 
-<input id="BtnAddShift" type="button" value="Add Shift"  />
-
-
+    <input id="BtnAddShift" type="button" class="btn btn-default" value="Add Shift" />
+    <div class="horizontalRule"></div>
+</div>
 <div id="ProcessBlock"></div>

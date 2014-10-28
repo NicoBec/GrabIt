@@ -11,7 +11,10 @@ namespace GrabIt
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                "~/Scripts/jquery-1.10.2.min.js"));
+                "~/Scripts/jquery-1.10.2.js"
+                , "~/Scripts/dataTables.bootstrap.js"
+                ,"~/Scripts/bootstrap-timepicker.js"
+                , "~/Scripts/jquery.dataTables.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                 "~/Scripts/jquery.unobtrusive*",
@@ -36,14 +39,16 @@ namespace GrabIt
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                 "~/Scripts/bootstrap.js",
-                "~/Scripts/jquery-ui-1.11.2.custom/jquery-ui.min.js",
+                "~/Scripts/jquery-ui-1.11.2.custom/jquery-ui.js",
                 "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                  "~/Content/bootstrap.css",
-                 "~/Scripts/jquery-ui-1.11.2.custom/jquery-ui.min.css",
-                 // "~/Scripts/jquery-ui-1.11.2.custom/jquery-ui.structure.min.css",
-                  "~/Scripts/jquery-ui-1.11.2.custom/jquery-ui.theme.min.css",
+                 "~/Scripts/jquery-ui-1.11.2.custom/jquery-ui.css",
+                 "~/Content/dataTables.bootstrap.css",
+                  "~/Content/jquery.dataTables.css",
+                  "~/Scripts/jquery-ui-1.11.2.custom/jquery-ui.theme.css",
+                  "~/Content/bootstrap-timepicker.css",
                  "~/Content/Site.css"));
 
             // Set EnableOptimizations to false for debugging. For more information,
