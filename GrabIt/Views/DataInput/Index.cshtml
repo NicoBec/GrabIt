@@ -6,13 +6,13 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-
-        $("#datepicker").datepicker({ dateFormat: 'dd-mm-yy' });
+        debugger;
+        //$("#datepicker").datepicker({ dateFormat: 'dd-mm-yy' });
 
         var myDate = new Date();
         var prettyDate = myDate.getDate() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getFullYear();
         $("#datepicker").val(prettyDate);
-        console.log("$(document).ready(function () {");
+       
         $("#BtnAddShift").click(function () {
             console.log("Ja Nee");
             $.ajax({
@@ -33,6 +33,7 @@
 </script>
 
 <h2>DataInput</h2>
+<img src="/Content/images/LargoLogo.gif" style="float:  right;">
 <h4>Here you can capture the shift info</h4>
 <div style="margin-left:15px;">
     <div class="form-group">

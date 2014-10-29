@@ -12,9 +12,9 @@ namespace GrabIt
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                 "~/Scripts/jquery-1.10.2.js"
+                , "~/Scripts/jquery.dataTables.js"
                 , "~/Scripts/dataTables.bootstrap.js"
-                ,"~/Scripts/bootstrap-timepicker.js"
-                , "~/Scripts/jquery.dataTables.js"));
+                ,"~/Scripts/bootstrap-timepicker.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                 "~/Scripts/jquery.unobtrusive*",

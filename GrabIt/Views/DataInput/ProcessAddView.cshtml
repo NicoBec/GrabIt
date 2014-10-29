@@ -2,12 +2,9 @@
 <h4>Please enter the process details.</h4>
 <script type="text/javascript">
     $(document).ready(function () {
-
-        
- 
-       
-        $('#TxtStartTime').timepicker();
-       
+      
+        //$('#timepicker1').timepicker();
+        //$('#TxtEndTime').timepicker();
     });
 </script>
 
@@ -16,23 +13,31 @@
     <div class="row">
         @{Html.RenderAction("GetShiftType", "DataInput");}
 
-        <div class="form-group">
-            <label class="col-sx-2 control-label" for="TxtEndTime">Start Time:</label>
-            <div class="col-sx-10">
-               @* <input id="TxtStartTime" type="text" class="form-control" />*@
-                <div class="input-append bootstrap-timepicker">
-                    <input id="TxtStartTime" type="text" class="input-small">
-                    <span class="add-on"><i class="icon-time"></i></span>
+        <div class="form-group col-md-10">
+            <div class="col-xs-4">
+                <label class="col-xs-10 control-label" for="TxtStartTime">Start Time:</label>
+                <div class="col-xs-6">
+                    <input id="TxtStartTime" type="time" class="form-control">
+
                 </div>
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group col-md-10">
+            <div class="col-xs-4">
+                <label class="col-xs-10 control-label" for="TxtEndTime">Start Time:</label>
+                <div class="col-xs-6">
+                    <input id="TxtStartTime" type="time" class="form-control">
+                </div>
+            </div>
+        </div>
+       <div style="clear:both"></div>
+        @*<div class="form-group">
             <label class="col-sx-2 control-label" for="TxtEndTime">End Time:</label>
             <div class="col-sx-10">
                 <input id="TxtEndTime" type="text" class="form-control" />
             </div>
-        </div>
+        </div>*@
 
 
 
