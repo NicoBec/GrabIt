@@ -13,12 +13,13 @@ namespace GrabIt.Controllers
         private GrabItEntities db = new GrabItEntities();
         public ActionResult Index()
         {
-
+           
+  
             return View();
         }
         public PartialViewResult ProcessAddView()
         {
-           // var model = db.GetProcessesByDate("");
+            // var model = db.GetProcessesByDate("");
 
             return PartialView("ProcessAddView");
         }
@@ -29,7 +30,9 @@ namespace GrabIt.Controllers
             {
                 theDate = DateTime.Now.Date;
 
-            }else{
+            }
+            else
+            {
                 theDate = DateTime.Parse(date);
             }
 
@@ -51,6 +54,46 @@ namespace GrabIt.Controllers
         {
             var model = db.PROCESSCATEGORIES.ToList();
             return PartialView(model);
+        }
+        //measurements
+        public PartialViewResult GetMeasurements(int ProcessTypeID = 3)
+        {
+            Measurements modelItem = new Measurements();
+
+            modelItem.SortByCat(db.MEASUREMENTVIEWs.Where(item => item.ProcessTypeID == ProcessTypeID).ToList());
+            var model = modelItem.MeasurementsByCat;
+            return PartialView(model);
+        }
+
+    }
+
+    public class Measurements
+    {
+        public List<List<MEASUREMENTVIEW>> MeasurementsByCat = new List<List<MEASUREMENTVIEW>>();
+
+        public void SortByCat(List<MEASUREMENTVIEW> Measures)
+        {
+            Dictionary<string, int> catsdone = new Dictionary<string, int>();
+            int CatCnt = 0;
+            foreach (MEASUREMENTVIEW item in Measures)
+            {
+                if (catsdone.Keys.Contains(item.Category))
+                {
+                    MeasurementsByCat[catsdone[item.Category]].Add(item);
+                }
+                else
+                {
+                    catsdone.Add(item.Category, CatCnt++);
+
+                    MeasurementsByCat.Add(new List<MEASUREMENTVIEW>());
+
+                    MeasurementsByCat[catsdone[item.Category]].Add(item);
+                   
+                }
+
+            }
+
+
         }
     }
 }

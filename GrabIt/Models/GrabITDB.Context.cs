@@ -40,9 +40,9 @@ namespace GrabIt.Models
         public virtual DbSet<PROCESS> PROCESSES { get; set; }
         public virtual DbSet<PROCESSTYPE> PROCESSTYPES { get; set; }
         public virtual DbSet<SHIFTTYPE> SHIFTTYPES { get; set; }
-        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<USER> USERS { get; set; }
         public virtual DbSet<ProcessesView> ProcessesViews { get; set; }
+        public virtual DbSet<MEASUREMENTVIEW> MEASUREMENTVIEWs { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

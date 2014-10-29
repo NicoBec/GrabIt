@@ -17,9 +17,9 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
-    <IISExpressUseClassicPipelineMode />
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -269,6 +269,9 @@
     <Compile Include="Models\MEASUREMENTTYPE.cs">
       <DependentUpon>GrabITDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\MEASUREMENTVIEW.cs">
+      <DependentUpon>GrabITDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\MeViewModels.cs" />
     <Compile Include="Models\PROCESS.cs">
       <DependentUpon>GrabITDB.tt</DependentUpon>
@@ -289,9 +292,6 @@
       <DependentUpon>GrabITDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sp_helpdiagrams_Result.cs">
-      <DependentUpon>GrabITDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>GrabITDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\USER.cs">
@@ -454,6 +454,7 @@
     <Content Include="Views\DataInput\GetShiftType.cshtml" />
     <Content Include="Views\DataInput\GetProcessType.cshtml" />
     <Content Include="Views\DataInput\GetProcessCat.cshtml" />
+    <Content Include="Views\DataInput\GetMeasurements.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

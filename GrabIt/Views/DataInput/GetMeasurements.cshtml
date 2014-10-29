@@ -1,0 +1,44 @@
+﻿@model List<List<GrabIt.Models.MEASUREMENTVIEW>>
+@{
+    ViewBag.Title = "GetMeasurements";
+}
+
+<h3>Measurements</h3>
+
+@foreach (var Cat in Model)
+{
+    <h4><b>@Html.DisplayFor(cat => Cat[0].Category)</b></h4>
+    <div class="container" style="margin-top:15px;margin-left:15px;">
+        <div class="row">
+            @foreach (var Measurement in Cat)
+            {
+                var range = "";
+                if (Measurement.LowerLimit != null && Measurement.UpperLimit != null)
+                {
+                    range = Measurement.LowerLimit.ToString() + " < " + Measurement.Desc + " < " + Measurement.UpperLimit.ToString();
+                }
+                else if (Measurement.LowerLimit == null && Measurement.UpperLimit != null)
+                {
+                    range = Measurement.Desc + " < " + Measurement.UpperLimit.ToString();
+                }
+                else if (Measurement.LowerLimit != null && Measurement.UpperLimit == null)
+                {
+                    range = Measurement.LowerLimit.ToString() + " < " + Measurement.Desc;
+                }
+                else
+                {
+                    range = "-";
+                }
+                <div class="form-group col-sx-5 col-sm-4 col-md-3">
+                    <label class="col-sx-2 control-label" for="Name">@Html.DisplayFor(msr => Measurement.Desc):</label>
+                    <div class="col-sx-10">
+                        <input id="Name" type="text" class="input-small">
+                    </div>
+                    <label class="col-sx-2 control-label" style="color: red;"><small>@range</small></label>
+                </div>
+
+            }
+        </div>
+    </div>
+    <div class="horizontalRule"></div>
+}

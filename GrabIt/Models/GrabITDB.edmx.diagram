@@ -18,7 +18,6 @@
         <EntityTypeShape EntityType="GrabItModel.PROCESS" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="GrabItModel.PROCESSTYPE" Width="1.5" PointX="3" PointY="5" IsExpanded="true" />
         <EntityTypeShape EntityType="GrabItModel.SHIFTTYPE" Width="1.5" PointX="3" PointY="2.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="GrabItModel.sysdiagram" Width="1.5" PointX="10.75" PointY="6.125" IsExpanded="true" />
         <EntityTypeShape EntityType="GrabItModel.USER" Width="1.5" PointX="3" PointY="9" IsExpanded="true" />
         <AssociationConnector Association="GrabItModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
         <AssociationConnector Association="GrabItModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
@@ -35,6 +34,7 @@
         <AssociationConnector Association="GrabItModel.AspNetUserRoles" ManuallyRouted="false" />
         <AssociationConnector Association="GrabItModel.PROCESSLINK" ManuallyRouted="false" />
         <EntityTypeShape EntityType="GrabItModel.ProcessesView" Width="1.5" PointX="0.75" PointY="11.75" />
+        <EntityTypeShape EntityType="GrabItModel.MEASUREMENTVIEW" Width="1.5" PointX="3.375" PointY="11.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
