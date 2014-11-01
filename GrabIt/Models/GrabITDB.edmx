@@ -120,6 +120,7 @@
           <Property Name="EndTime" Type="nchar" MaxLength="10" Nullable="false" />
           <Property Name="ProcessTypeID" Type="int" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="Completed" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="PROCESSLINK">
           <Key>
@@ -178,14 +179,16 @@ warning 6002: The table/view 'GrabIt.dbo.ProcessesView' does not have a primary 
             <PropertyRef Name="StartTime" />
             <PropertyRef Name="EndTime" />
             <PropertyRef Name="UserName" />
+            <PropertyRef Name="Completed" />
           </Key>
           <Property Name="ProcessID" Type="int" Nullable="false" />
           <Property Name="Shift" Type="nchar" MaxLength="50" />
           <Property Name="Date" Type="date" Nullable="false" />
           <Property Name="StartTime" Type="nchar" MaxLength="10" Nullable="false" />
           <Property Name="EndTime" Type="nchar" MaxLength="10" Nullable="false" />
-          <Property Name="Desc" Type="nchar" MaxLength="50" />
+          <Property Name="Desc" Type="nvarchar" MaxLength="50" />
           <Property Name="UserName" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="Completed" Type="bit" Nullable="false" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
@@ -429,7 +432,8 @@ warning 6002: The table/view 'GrabIt.dbo.ProcessesView' does not have a primary 
     [ProcessesView].[StartTime] AS [StartTime], 
     [ProcessesView].[EndTime] AS [EndTime], 
     [ProcessesView].[Desc] AS [Desc], 
-    [ProcessesView].[UserName] AS [UserName]
+    [ProcessesView].[UserName] AS [UserName], 
+    [ProcessesView].[Completed] AS [Completed]
     FROM [dbo].[ProcessesView] AS [ProcessesView]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
@@ -629,6 +633,7 @@ warning 6002: The table/view 'GrabIt.dbo.ProcessesView' does not have a primary 
           <NavigationProperty Name="PROCESSTYPE" Relationship="Self.FK_PROCESSES_PROCESSTYPES" FromRole="PROCESSES" ToRole="PROCESSTYPES" />
           <NavigationProperty Name="SHIFTTYPE" Relationship="Self.FK_PROCESSES_SHIFTTYPES" FromRole="PROCESSES" ToRole="SHIFTTYPES" />
           <NavigationProperty Name="USER" Relationship="Self.FK_PROCESSES_USERS" FromRole="PROCESSES" ToRole="USERS" />
+          <Property Name="Completed" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="PROCESSTYPE">
           <Key>
@@ -951,14 +956,16 @@ warning 6002: The table/view 'GrabIt.dbo.ProcessesView' does not have a primary 
             <PropertyRef Name="StartTime" />
             <PropertyRef Name="EndTime" />
             <PropertyRef Name="UserName" />
+            <PropertyRef Name="Completed" />
           </Key>
           <Property Name="ProcessID" Type="Int32" Nullable="false" />
           <Property Name="Shift" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="StartTime" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="EndTime" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="Desc" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="Desc" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UserName" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="Completed" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="MEASUREMENTVIEW">
           <Key>
@@ -1086,6 +1093,7 @@ warning 6002: The table/view 'GrabIt.dbo.ProcessesView' does not have a primary 
           <EntitySetMapping Name="PROCESSES">
             <EntityTypeMapping TypeName="GrabItModel.PROCESS">
               <MappingFragment StoreEntitySet="PROCESSES">
+                <ScalarProperty Name="Completed" ColumnName="Completed" />
                 <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
                 <ScalarProperty Name="ShiftTypeID" ColumnName="ShiftTypeID" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
@@ -1141,6 +1149,7 @@ warning 6002: The table/view 'GrabIt.dbo.ProcessesView' does not have a primary 
           <EntitySetMapping Name="ProcessesViews">
             <EntityTypeMapping TypeName="GrabItModel.ProcessesView">
               <MappingFragment StoreEntitySet="ProcessesView">
+                <ScalarProperty Name="Completed" ColumnName="Completed" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="Desc" ColumnName="Desc" />
                 <ScalarProperty Name="EndTime" ColumnName="EndTime" />

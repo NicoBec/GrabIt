@@ -4,11 +4,12 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $("#SelCatType").change(function () {
+            $("#DivProcessType").slideUp('slow');
             $.ajax({
                 url: '@(Url.Action("GetProcessType", "DataInput"))',
                 data: { catID: $("#SelCatType").val() },
                 success: function (data) {
-                    $("#DivProcessType").html(data);
+                    $("#DivProcessType").html(data).slideDown('slow');
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     alert('Failed to retrieve books.');

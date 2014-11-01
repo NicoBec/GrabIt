@@ -4,7 +4,31 @@
 }
 
 <h3>Measurements</h3>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".measurementval").keyup(function () {
+            console.log(".measurementval");
+            CheckFormMeasurementscomplete();
+        })
 
+    });
+
+    function CheckFormMeasurementscomplete() {
+        var count = MeasurementsList.length;
+        var counted = 0;
+        $.each(MeasurementsList, function (index, item) {
+            debugger;
+            var val = $("#" + item.MeasurementTypeID).val();
+            if (val != "") {
+                counted++;
+            }
+        });
+        if (count == counted) {
+            $("#BtnSaveMeasurements").val("Complete");
+        }
+    }
+
+</script>
 @foreach (var Cat in Model)
 {
     <h4><b>@Html.DisplayFor(cat => Cat[0].Category)</b></h4>
@@ -32,7 +56,7 @@
                 <div class="form-group col-sx-5 col-sm-4 col-md-3">
                     <label class="col-sx-2 control-label" for="Name">@Html.DisplayFor(msr => Measurement.Desc):</label>
                     <div class="col-sx-10">
-                        <input id="Name" type="text" class="form-control">
+                        <input id="@Html.DisplayFor(msr => Measurement.MeasurementTypeID)" type="number" class="form-control measurementval">
                     </div>
                     <label class="col-sx-2 control-label" style="color: red;"><small>@range</small></label>
                 </div>

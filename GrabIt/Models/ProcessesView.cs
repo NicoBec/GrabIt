@@ -21,5 +21,6 @@ namespace GrabIt.Models
         public string EndTime { get; set; }
         public string Desc { get; set; }
         public string UserName { get; set; }
+        public bool Completed { get; set; }
     }
 }

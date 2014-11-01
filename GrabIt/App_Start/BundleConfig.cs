@@ -14,7 +14,8 @@ namespace GrabIt
                 "~/Scripts/jquery-1.10.2.js"
                 , "~/Scripts/jquery.dataTables.js"
                 , "~/Scripts/dataTables.bootstrap.js"
-                ,"~/Scripts/bootstrap-timepicker.js"));
+                ,"~/Scripts/bootstrap-timepicker.js"
+                , "~/Scripts/bootstrapValidator.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                 "~/Scripts/jquery.unobtrusive*",
@@ -49,6 +50,7 @@ namespace GrabIt
                   "~/Content/jquery.dataTables.css",
                   "~/Scripts/jquery-ui-1.11.2.custom/jquery-ui.theme.css",
                   "~/Content/bootstrap-timepicker.css",
+                  "~/Content/bootstrapValidator.css",
                  "~/Content/Site.css"));
 
             // Set EnableOptimizations to false for debugging. For more information,

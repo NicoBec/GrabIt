@@ -26,6 +26,7 @@ namespace GrabIt.Models
         public string EndTime { get; set; }
         public int ProcessTypeID { get; set; }
         public int UserID { get; set; }
+        public bool Completed { get; set; }
     
         public virtual ICollection<MEASUREMENT> MEASUREMENTS { get; set; }
         public virtual PROCESSTYPE PROCESSTYPE { get; set; }

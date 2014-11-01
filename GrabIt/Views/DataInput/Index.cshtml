@@ -6,29 +6,149 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        debugger;
-        //$("#datepicker").datepicker({ dateFormat: 'dd-mm-yy' });
-
+        $("#datepicker").datepicker({ dateFormat: 'yy-mm-dd' });
         var myDate = new Date();
-        var prettyDate = myDate.getDate() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getFullYear();
+        var day = myDate.getDate();
+
+        day = day < 10 ? "0" + day : day;
+
+
+        var prettyDate = myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + day;
         $("#datepicker").val(prettyDate);
-       
+
         $("#BtnAddShift").click(function () {
             console.log("Ja Nee");
+            $("#ProcessBlock").slideUp('slow');
             $.ajax({
                 url: '@(Url.Action("ProcessAddView", "DataInput"))',
                 data: {},
                 success: function (data) {
-                    $("#ProcessBlock").html(data);
+                    $("#ProcessBlock").html(data).slideDown('slow');
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     alert('Failed to retrieve books.');
                 }
             });
         });
+
+
     });
+    function dateChanged() {
+        console.log($("#datepicker").val());
+        $("#ProcessesView").slideUp('slow');
+        $.ajax({
+            url: '@(Url.Action("ProcessAddedlist", "DataInput"))',
+            data: { date: $("#datepicker").val() },
+            success: function (data) {
+                $("#ProcessesView").html(data).slideDown('slow');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(thrownError);
+            }
+        });
+
+    }
+    function getMeasurements(ProcessID, ProcessTypeID) {
+        console.log("getMeasurements(" + ProcessID + ")");
+        $("#ProcessesView").slideUp('slow');
 
 
+        $.ajax({
+            url: '@(Url.Action("GetMeasurements", "DataInput"))',
+            data: { ProcessTypeID: ProcessTypeID },
+            success: function (data) {
+                $("#MeasurementsBlock").html(data).slideDown('slow');
+                $("#divBtnSave").slideDown("slow");
+                
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(thrownError);
+            }
+        });
+    }
+    function getMeasurementsList(ProcessTypeID) {
+        $.ajax({
+            url: '@(Url.Action("GetMeasurementsList", "DataInput"))',
+            data: { ProcessTypeID: ProcessTypeID },
+            contentType: 'application/json',
+            // dataType: 'json',
+            success: function (data) {
+                debugger;
+                $.each(data, function (index, item) {
+                    item.Desc = $.trim(item.Desc);
+                    MeasurementsList.push(item);
+                });
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(thrownError);
+            }
+        });
+
+        @*$.ajax({
+            type: "POST",
+            url: '@(Url.Action("GetMeasurementsList", "DataInput"))',
+            data: { ProcessTypeID: ProcessTypeID },
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (msg) {
+                debugger;
+            },
+            error: function (x, t, m, b) {
+                debugger;
+            }
+        });*@
+    }
+    function getMeasurementsByProcessID(ProcessID) {
+        $.ajax({
+            url: '@(Url.Action("GetMeasurementsByProcessID", "DataInput"))',
+            data: { ProcessID: ProcessID },
+            contentType: 'application/json',
+            // dataType: 'json',
+            success: function (data) {
+                debugger;
+                $.each(data, function (index, item) {
+                    $("#" + item.ID).val($.trim(item.Value));
+                });
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(thrownError);
+            }
+        });
+    }
+    function saveMeasurements() {
+        console.log(MeasurementsList.length);
+        $.each(MeasurementsList, function (index, item) {
+            debugger;
+            var val = $("#" + item.MeasurementTypeID).val();
+            console.log($.trim(item.Desc) + ": " + val)
+            if (val != "") {
+                var obj = {
+                    ProcessID: 4,
+                    MeasurementTypeID: item.MeasurementTypeID,
+                    Value: val
+                }
+                saveMeasurement(obj);
+            }
+           
+
+        });
+    }
+    function saveMeasurement(MeasurmentObject) {
+        $.ajax({
+            url: '@(Url.Action("AddMeasurement", "DataInput"))',
+            data: MeasurmentObject,
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(thrownError);
+            }
+        });
+    }
+
+    var MeasurementsList = [];
 
 </script>
 
@@ -39,16 +159,21 @@
     <div class="form-group">
         <label class="col-sx-2 control-label" for="TxtEndTime">Date:</label>
         <div class="col-sx-10">
-            <input id="datepicker" type="text" class="form-control" />
+            <input id="datepicker" type="text" class="form-control" onchange="dateChanged();" />
         </div>
     </div>
-
-    @{Html.RenderAction("ProcessAddedlist", "DataInput");}
-
+    <div id="ProcessesView">
+        @{Html.RenderAction("ProcessAddedlist", "DataInput");}
+    </div>
     <input id="BtnAddShift" type="button" class="btn btn-default" value="Add Shift" />
     <div class="horizontalRule"></div>
 </div>
 <div id="ProcessBlock"></div>
+<div id="MeasurementsBlock"></div>
+<div class="horizontalRule"></div>
+<div id="divBtnSave" style="display: none;">
+    <input id="BtnSaveMeasurements" type="button" class="btn btn-default" value="Save" onclick="saveMeasurements();" />
+</div>
 
 
-@{Html.RenderAction("GetMeasurements", "DataInput");}
+@*@{Html.RenderAction("GetMeasurements", "DataInput");}*@

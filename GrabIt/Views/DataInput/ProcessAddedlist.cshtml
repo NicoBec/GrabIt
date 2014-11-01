@@ -14,6 +14,7 @@
             <th> @Html.DisplayNameFor(model => model.EndTime)</th>
             <th> @Html.DisplayNameFor(model => model.Desc)</th>
             <th> @Html.DisplayNameFor(model => model.UserName)</th>
+            <th> @Html.DisplayNameFor(model => model.Completed)</th>
         </tr>
     </thead>
     <tbody>
@@ -27,6 +28,15 @@
                 <td> @Html.DisplayFor(modelItem => item.EndTime)</td>
                 <td> @Html.DisplayFor(modelItem => item.Desc)</td>
                 <td> @Html.DisplayFor(modelItem => item.UserName)</td>
+                @if (item.Completed)
+                {
+
+                    <td><span class="glyphicon glyphicon-ok-circle" style="color:limegreen;display:block; text-align:center; margin:0 auto;"></span></td>
+                }
+                else
+                {
+                    <td><span class="glyphicon glyphicon-remove-circle" style="color:red;display:block; text-align:center; margin:0 auto;"></span></td>
+                }
 
             </tr>
         }
