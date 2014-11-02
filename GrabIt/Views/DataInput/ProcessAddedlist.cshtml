@@ -8,6 +8,7 @@
 <table id="ProcessList" class="table table-striped table-bordered" cellspacing="0" width="100%">
     <thead>
         <tr>
+           
             <th> @Html.DisplayNameFor(model => model.Date)</th>
             <th> @Html.DisplayNameFor(model => model.Shift)</th>
             <th> @Html.DisplayNameFor(model => model.StartTime)</th>
@@ -22,7 +23,8 @@
         {
             string date = item.Date.ToString("dd-MM-yyyy");
             <tr>
-                <td> @date</td>
+                
+                <td> @date<span onclick="getProcessByProcessID(@Html.DisplayFor(modelItem => item.ProcessID)); " class="glyphicon glyphicon-pencil" style="color:limegreen; padding-left:10px;"></span></td>
                 <td> @Html.DisplayFor(modelItem => item.Shift)</td>
                 <td> @Html.DisplayFor(modelItem => item.StartTime)</td>
                 <td> @Html.DisplayFor(modelItem => item.EndTime)</td>

@@ -10,6 +10,9 @@
                 data: { catID: $("#SelCatType").val() },
                 success: function (data) {
                     $("#DivProcessType").html(data).slideDown('slow');
+                    if (selectedProcess) {
+                        $("#SelProcessType").val(selectedProcess.ProcessTypeID);
+                    }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     alert('Failed to retrieve books.');

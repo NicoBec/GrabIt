@@ -17,7 +17,6 @@
         $("#datepicker").val(prettyDate);
 
         $("#BtnAddShift").click(function () {
-            console.log("Ja Nee");
             $("#ProcessBlock").slideUp('slow');
             $.ajax({
                 url: '@(Url.Action("ProcessAddView", "DataInput"))',
@@ -49,24 +48,25 @@
 
     }
     function getMeasurements(ProcessID, ProcessTypeID) {
+        var done = $.Deferred();
         console.log("getMeasurements(" + ProcessID + ")");
-        $("#ProcessesView").slideUp('slow');
-
-
         $.ajax({
             url: '@(Url.Action("GetMeasurements", "DataInput"))',
             data: { ProcessTypeID: ProcessTypeID },
             success: function (data) {
                 $("#MeasurementsBlock").html(data).slideDown('slow');
                 $("#divBtnSave").slideDown("slow");
-                
+                done.resolve(true);
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log(thrownError);
+                done.resolve(false);
             }
         });
+        return done;
     }
     function getMeasurementsList(ProcessTypeID) {
+        var doneMesList = $.Deferred();
         $.ajax({
             url: '@(Url.Action("GetMeasurementsList", "DataInput"))',
             data: { ProcessTypeID: ProcessTypeID },
@@ -78,28 +78,18 @@
                     item.Desc = $.trim(item.Desc);
                     MeasurementsList.push(item);
                 });
-
+                doneMesList.resolve(true);
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log(thrownError);
+                doneMesList.resolve(false);
             }
         });
+        return doneMesList;
 
-        @*$.ajax({
-            type: "POST",
-            url: '@(Url.Action("GetMeasurementsList", "DataInput"))',
-            data: { ProcessTypeID: ProcessTypeID },
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (msg) {
-                debugger;
-            },
-            error: function (x, t, m, b) {
-                debugger;
-            }
-        });*@
     }
     function getMeasurementsByProcessID(ProcessID) {
+
         $.ajax({
             url: '@(Url.Action("GetMeasurementsByProcessID", "DataInput"))',
             data: { ProcessID: ProcessID },
@@ -110,7 +100,7 @@
                 $.each(data, function (index, item) {
                     $("#" + item.ID).val($.trim(item.Value));
                 });
-
+                console.log(data);
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log(thrownError);
@@ -118,24 +108,27 @@
         });
     }
     function saveMeasurements() {
-        console.log(MeasurementsList.length);
+        if (currentProcessID == 0) {
+            return false;
+        }
         $.each(MeasurementsList, function (index, item) {
             debugger;
             var val = $("#" + item.MeasurementTypeID).val();
             console.log($.trim(item.Desc) + ": " + val)
             if (val != "") {
                 var obj = {
-                    ProcessID: 4,
+                    ProcessID: currentProcessID,
                     MeasurementTypeID: item.MeasurementTypeID,
                     Value: val
                 }
                 saveMeasurement(obj);
             }
-           
+
 
         });
     }
     function saveMeasurement(MeasurmentObject) {
+        console.log(MeasurmentObject);
         $.ajax({
             url: '@(Url.Action("AddMeasurement", "DataInput"))',
             data: MeasurmentObject,
@@ -147,8 +140,51 @@
             }
         });
     }
-
+    function getProcessByProcessID(ProcessID) {
+        currentProcessID = ProcessID;
+        $.ajax({
+            url: '@(Url.Action("GetProcessByProcessID", "DataInput"))',
+            data: { ProcessID: ProcessID },
+            contentType: 'application/json',
+            // dataType: 'json',
+            success: function (data) {
+                if (data) {
+                    selectedProcess = data;
+                    $("#BtnAddShift").attr("disabled", true);
+                    $("#ProcessBlock").slideUp('slow');
+                    $.ajax({
+                        url: '@(Url.Action("ProcessAddView", "DataInput"))',
+                        data: {},
+                        success: function (data) {
+                            $("#ProcessBlock").html(data);
+                            //Set the Data
+                            $("#SelShiftType").val(selectedProcess.ShiftTypeID);
+                            $("#SelCatType").val(selectedProcess.ProcessCategoryID);
+                            //this is here to update the ProcessType select Box
+                            $("#SelCatType").change();
+                            $("#TxtStartTime").val($.trim(selectedProcess.StartTime));
+                            $("#TxtEndTime").val($.trim(selectedProcess.EndTime));
+                            $("#ProcessBlock").slideDown("slow");
+                            $.when(
+                             getMeasurements(ProcessID, selectedProcess.ProcessTypeID),
+                             getMeasurementsList(selectedProcess.ProcessTypeID)).done(function () {
+                                 getMeasurementsByProcessID(ProcessID);
+                             });
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            console.log(thrownError);
+                        }
+                    });
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(thrownError);
+            }
+        });
+    }
     var MeasurementsList = [];
+    var selectedProcess = null;
+    var currentProcessID = 0;
 
 </script>
 

@@ -13,9 +13,29 @@ namespace GrabIt.Controllers
         private GrabItEntities db = new GrabItEntities();
         public ActionResult Index()
         {
-
-
             return View();
+        }
+        public JsonResult GetProcessByProcessID(int ProcessID)
+        {
+
+            var items = (from u in db.PROCESSES
+                 join e in db.PROCESSTYPES on u.ProcessTypeID equals e.ProcessTypeID
+                 where u.ProcessID == ProcessID
+
+                  select new
+            {
+                ShiftTypeID = u.ShiftTypeID,
+                Date = u.Date.ToString(),
+                StartTime = u.StartTime,
+                EndTime = u.EndTime,
+                ProcessTypeID = u.ProcessTypeID,
+                UserID = u.UserID,
+                Completed = u.Completed,
+                ProcessCategoryID = e.ProcessCategoryID
+            }).SingleOrDefault();
+
+            return Json(items, JsonRequestBehavior.AllowGet);
+
         }
         public PartialViewResult ProcessAddView()
         {
@@ -56,22 +76,17 @@ namespace GrabIt.Controllers
             return PartialView(model);
         }
         //measurements
-        public PartialViewResult GetMeasurements(int ProcessTypeID = 3, int MeasurementID = 0)
+        public PartialViewResult GetMeasurements(int ProcessTypeID)
         {
             Measurements modelItem = new Measurements();
 
             modelItem.SortByCat(db.MEASUREMENTVIEWs.Where(item => item.ProcessTypeID == ProcessTypeID).ToList());
             var model = modelItem.MeasurementsByCat;
 
-            if (MeasurementID != 0)
-            {
-
-            }
-
             return PartialView(model);
         }
 
-        public JsonResult GetMeasurementsList(int ProcessTypeID = 3)
+        public JsonResult GetMeasurementsList(int ProcessTypeID)
         {
 
 
@@ -84,10 +99,10 @@ namespace GrabIt.Controllers
             return Json(items, JsonRequestBehavior.AllowGet);
 
         }
-        public JsonResult GetMeasurementsByProcessID(int ProcessID = 4)
+        public JsonResult GetMeasurementsByProcessID(int ProcessID)
         {
 
-            var items = db.MEASUREMENTS.Where(item => item.ProcessID == ProcessID).Select(u => new {ID = u.MeasurementTypeID,Value = u.Value });
+            var items = db.MEASUREMENTS.Where(item => item.ProcessID == ProcessID).Select(u => new { ID = u.MeasurementTypeID, Value = u.Value });
             return Json(items, JsonRequestBehavior.AllowGet);
 
         }
@@ -100,7 +115,7 @@ namespace GrabIt.Controllers
         public int AddMeasurement(MEASUREMENT Measure)
         {
             MEASUREMENT DBMeasure = db.MEASUREMENTS.SingleOrDefault(item => item.MeasurementTypeID == Measure.MeasurementTypeID && item.ProcessID == Measure.ProcessID);
-            if ( DBMeasure != null)
+            if (DBMeasure != null)
             {
                 DBMeasure.Value = Measure.Value;
                 db.SaveChanges();
@@ -110,7 +125,7 @@ namespace GrabIt.Controllers
                 db.MEASUREMENTS.Add(Measure);
             }
 
-           
+
             db.SaveChanges();
             return Measure.ProcessID;
         }
