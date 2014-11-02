@@ -48,17 +48,18 @@
             EndTime: $("#TxtEndTime").val(),
             ProcessTypeID: $("#SelProcessType").val(),
             UserID: 1,
-            Completed: false
+            Completed: false,
+            ProcessID: selectedProcess 
         }
         console.log(ProcObj);
 
         $.ajax({
-            url: '@(Url.Action("AddProcess", "DataInput"))',
+            url: '@(Url.Action("AddProcess", "DataInput"))', 
             data: ProcObj,
             success: function (data) {
                 getMeasurements(data, $("#SelProcessType").val());
-
-
+                selectedProcess = data;
+               
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log(thrownError);

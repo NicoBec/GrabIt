@@ -15,7 +15,7 @@
             <th> @Html.DisplayNameFor(model => model.EndTime)</th>
             <th> @Html.DisplayNameFor(model => model.Desc)</th>
             <th> @Html.DisplayNameFor(model => model.UserName)</th>
-            <th> @Html.DisplayNameFor(model => model.Completed)</th>
+            <th> Status</th>
         </tr>
     </thead>
     <tbody>
@@ -24,7 +24,7 @@
             string date = item.Date.ToString("dd-MM-yyyy");
             <tr>
                 
-                <td> @date<span onclick="getProcessByProcessID(@Html.DisplayFor(modelItem => item.ProcessID)); " class="glyphicon glyphicon-pencil" style="color:limegreen; padding-left:10px;"></span></td>
+                <td> @date<span onclick="getProcessByProcessID(@Html.DisplayFor(modelItem => item.ProcessID)); " class="glyphicon glyphicon-pencil" style="color:limegreen; padding-left:20px; cursor: pointer;" title="Edit"></span></td>
                 <td> @Html.DisplayFor(modelItem => item.Shift)</td>
                 <td> @Html.DisplayFor(modelItem => item.StartTime)</td>
                 <td> @Html.DisplayFor(modelItem => item.EndTime)</td>
@@ -33,11 +33,11 @@
                 @if (item.Completed)
                 {
 
-                    <td><span class="glyphicon glyphicon-ok-circle" style="color:limegreen;display:block; text-align:center; margin:0 auto;"></span></td>
+                    <td><span class="glyphicon glyphicon-ok-circle" style="color:limegreen;display:block; text-align:center; margin:0 auto;" title="Complete"></span></td>
                 }
                 else
                 {
-                    <td><span class="glyphicon glyphicon-remove-circle" style="color:red;display:block; text-align:center; margin:0 auto;"></span></td>
+                    <td><span class="glyphicon glyphicon-remove-circle" style="color:red;display:block; text-align:center; margin:0 auto;" title="Incomplete"></span></td>
                 }
 
             </tr>

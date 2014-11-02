@@ -108,7 +108,23 @@ namespace GrabIt.Controllers
         }
         public int AddProcess(PROCESS prs)
         {
-            db.PROCESSES.Add(prs);
+
+            PROCESS current = db.PROCESSES.SingleOrDefault(item => item.ShiftTypeID == prs.ShiftTypeID && item.Date == prs.Date && item.ProcessTypeID == prs.ProcessTypeID);
+            if (current != null)
+            {
+                current.ShiftTypeID = prs.ShiftTypeID;
+                current.Date = prs.Date;
+                current.StartTime = prs.StartTime;
+                current.EndTime = prs.EndTime;
+                current.ProcessTypeID = prs.ProcessTypeID;
+                current.UserID = prs.UserID;
+                current.Completed = prs.Completed;
+               
+            }else{
+                db.PROCESSES.Add(prs);
+            }
+
+           
             db.SaveChanges();
             return prs.ProcessID;
         }

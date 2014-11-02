@@ -170,6 +170,7 @@
                              getMeasurementsList(selectedProcess.ProcessTypeID)).done(function () {
                                  getMeasurementsByProcessID(ProcessID);
                              });
+                            $("#BtnAddProcess").val("Save");
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
                             console.log(thrownError);
