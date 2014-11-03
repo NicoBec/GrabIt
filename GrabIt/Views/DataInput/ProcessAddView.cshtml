@@ -59,7 +59,8 @@
             success: function (data) {
                 getMeasurements(data, $("#SelProcessType").val());
                 selectedProcess = data;
-               
+                dateChanged();
+                $("#BtnAddProcess").val("Save");
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log(thrownError);
