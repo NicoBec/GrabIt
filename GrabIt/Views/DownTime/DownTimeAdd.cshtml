@@ -1,0 +1,246 @@
+﻿<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#DownTimeDate").datepicker({ dateFormat: 'yy-mm-dd' });
+        var myDate = new Date();
+        var day = myDate.getDate();
+
+        day = day < 10 ? "0" + day : day;
+
+
+        var prettyDate = myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + day;
+        $("#DownTimeDate").val(prettyDate);
+
+        //auto complete
+
+        $("#txtEquipmentTag").autocomplete({
+            source: function (request, response) {
+
+                $.ajax({
+                    dataType: "json",
+                    type: 'POST',
+                    url: '@Url.Action("getEquipmentTag", "DownTime")',
+                    data: { text: $("#txtEquipmentTag").val() },
+                    success: function (data) {
+                        $('input.suggest-user').removeClass('ui-autocomplete-loading');  // hide loading image
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.trim(),
+                                value: item.trim()
+                            }
+                        }));
+                        return response;
+                    },
+                    error: function (data) {
+                        $('input.suggest-user').removeClass('ui-autocomplete-loading');
+                    }
+                });
+            },
+            minLength: 3,
+        });
+
+        $("#txtReason").autocomplete({
+            source: function (request, response) {
+
+                $.ajax({
+                    dataType: "json",
+                    type: 'POST',
+                    url: '@Url.Action("getReasons", "DownTime")',
+                    data: { text: $("#txtReason").val() },
+                    success: function (data) {
+                        $('input.suggest-user').removeClass('ui-autocomplete-loading');  // hide loading image
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.trim(),
+                                value: item.trim()
+                            }
+                        }));
+                        return response;
+                    },
+                    error: function (data) {
+                        $('input.suggest-user').removeClass('ui-autocomplete-loading');
+                    }
+                });
+            },
+            minLength: 3,
+        });
+        $("#txtResponsiblePerson").autocomplete({
+            source: function (request, response) {
+
+                $.ajax({
+                    dataType: "json",
+                    type: 'POST',
+                    url: '@Url.Action("getResponsiblePersons", "DownTime")',
+                    data: { text: $("#txtResponsiblePerson").val() },
+                    success: function (data) {
+                        $('input.suggest-user').removeClass('ui-autocomplete-loading');  // hide loading image
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.trim(),
+                                value: item.trim()
+                            }
+                        }));
+                        return response;
+                    },
+                    error: function (data) {
+                        $('input.suggest-user').removeClass('ui-autocomplete-loading');
+                    }
+                });
+            },
+            minLength: 3,
+        });
+
+        $("#").val();
+       
+
+
+    });
+
+    function validateAndSaveDowntime() {
+        var date = $("#DownTimeDate").val();
+        var starttm = $("#TxtStartTime").val();
+        var endtm = $("#TxtEndTime").val();
+        var addOneDay = false;
+        if (Date.parse("1-1-2000 " + starttm) > Date.parse("1-1-2000 " + endtm)) {
+            addOneDay = true;
+        }
+
+        starttm = date + " " + starttm + ":00";
+        endtm = date + " " + endtm + ":00";
+
+        //SelShiftType
+        var data = {
+            date: date,
+            startDatetime: starttm,
+            endDatetime: endtm,
+            area: parseInt($("#SelArea").val()),
+            affectedArea: parseInt($("#SelAffectedArea").val()),
+            reason: $("#txtReason").val(),
+            equipmentTag: $("#txtEquipmentTag").val(),
+            responsiblePerson: $("#txtResponsiblePerson").val(),
+            notes: $("#txtaNotes").val(),
+            shiftType: parseInt($("#SelShiftType").val()),
+            addOneDay: addOneDay
+        };
+        $.ajax({
+            dataType: "json",
+            type: 'POST',
+            url: '@Url.Action("AddDownTime", "DownTime")',
+            data: data,
+            success: function (data) {
+                location.reload();
+            },
+            error: function (data) {
+                console.log("error");
+            }
+        });
+
+    }
+</script>
+<h4>Add Downtime</h4>
+
+<form id="addProcessForm" class="form-horizontal" data-bv-feedbackicons-valid="glyphicon glyphicon-ok" data-bv-feedbackicons-invalid="glyphicon glyphicon-remove" data-bv-feedbackicons-validating="glyphicon glyphicon-refresh">
+
+    <div class="container" style="margin-top:15px;margin-left:15px;">
+        <div class="row">
+            <div class="col-xs-5">
+                <div class="form-group">
+                    <label class="col-sx-2 control-label" for="DownTimeDate">Date:</label>
+                    <div class="col-sx-10">
+                        <input id="DownTimeDate" type="text" class="form-control" onchange="" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sx-2 control-label" for="SelArea">Area: </label>
+                    <div class="col-sx-10">
+                        <select id="SelArea" class="form-control">
+                            <option value="">Please Select</option>
+                            @foreach (var item in ViewBag.Area)
+                            {
+                                <option value="@item.LookupID">@item.LookupDesc</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sx-2 control-label" for="SelAffectedArea">Affected Area: </label>
+                    <div class="col-sx-10">
+                        <select id="SelAffectedArea" class="form-control">
+                            <option value="">Please Select</option>
+                            @foreach (var item in ViewBag.AffectedArea)
+                            {
+                                <option value="@item.LookupID">@item.LookupDesc</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sx-2 control-label" for="txtResponsiblePerson">Responsible Person:</label>
+                    <div class="col-sx-10">
+                        <input id="txtResponsiblePerson" type="text" class="form-control" onchange="" />
+                    </div>
+                </div>
+                <div class="form-group col-md-6" style="margin-left: -60px;">
+                    <div class="col-xs-12">
+                        <label class="col-xs-8 control-label" for="TxtStartTime">Start Time:</label>
+                        <div class="col-xs-10">
+                            <input id="TxtStartTime" type="time" class="form-control"
+                                   required
+                                   data-bv-notempty-message="The username is required">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group col-md-6" style="margin-left: -45px;">
+                        <div class="col-xs-12">
+                            <label class="col-xs-8 control-label" for="TxtEndTime">End Time:</label>
+                            <div class="col-xs-10">
+                                <input id="TxtEndTime" type="time" class="form-control" required data-bv-notempty-message="Required">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-5">
+                <div class="form-group col-md-10">
+                    <div class="form-group">
+                        <label class="col-sx-2 control-label" for="SelShiftType">Shift Type: </label>
+                        <div class="col-sx-10">
+                            <select id="SelShiftType" class="form-control">
+                                <option value="">Please Select</option>
+                                @foreach (var item in ViewBag.ShiftType)
+                                {
+                                    <option value="@item.ShiftTypeID">@item.Desc</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sx-2 control-label" for="txtReason">Reason:</label>
+                        <div class="col-sx-10">
+                            <input id="txtReason" type="text" class="form-control" onchange="" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sx-2 control-label" for="txtEquipmentTag">Equipment Tag:</label>
+                        <div class="col-sx-10">
+                            <input id="txtEquipmentTag" type="text" class="form-control" onchange="" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="comment">Notes:</label>
+                        <textarea class="form-control" rows="5" id="txtaNotes"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <input id="BtnAddProcess" type="button" class="btn btn-default" value="Add" onclick="validateAndSaveProcess();" />
+                <div class="horizontalRule"></div>
+            </div>
+
+        </div>
+        <div style="clear:both"></div>
+    </div>
+</form>

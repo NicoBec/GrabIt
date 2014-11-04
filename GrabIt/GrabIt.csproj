@@ -207,6 +207,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\DataInputController.cs" />
+    <Compile Include="Controllers\DownTimeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MeController.cs" />
@@ -237,10 +238,19 @@
     <Compile Include="Models\C__MigrationHistory.cs">
       <DependentUpon>GrabITDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DOWNTIME.cs">
+      <DependentUpon>GrabITDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DOWNTIMEVIEW.cs">
+      <DependentUpon>GrabITDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GetProcessesByDate_Result.cs">
       <DependentUpon>GrabITDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GetProcessesByDate_Result1.cs">
+      <DependentUpon>GrabITDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GLOBALLOOKUP.cs">
       <DependentUpon>GrabITDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GrabITDB.Context.cs">
@@ -259,6 +269,9 @@
       <DependentUpon>GrabITDB.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\LOOKUPCATEGORY.cs">
+      <DependentUpon>GrabITDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MEASUREMENT.cs">
       <DependentUpon>GrabITDB.tt</DependentUpon>
@@ -288,10 +301,19 @@
     <Compile Include="Models\SHIFTTYPE.cs">
       <DependentUpon>GrabITDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\sp_helpdiagramdefinition1_Result.cs">
+      <DependentUpon>GrabITDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
       <DependentUpon>GrabITDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\sp_helpdiagrams1_Result.cs">
+      <DependentUpon>GrabITDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\sp_helpdiagrams_Result.cs">
+      <DependentUpon>GrabITDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>GrabITDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\USER.cs">
@@ -478,6 +500,8 @@
     <Content Include="Views\DataInput\GetProcessType.cshtml" />
     <Content Include="Views\DataInput\GetProcessCat.cshtml" />
     <Content Include="Views\DataInput\GetMeasurements.cshtml" />
+    <Content Include="Views\DownTime\Index.cshtml" />
+    <Content Include="Views\DownTime\DownTimeAdd.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

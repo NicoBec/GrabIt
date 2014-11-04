@@ -21,7 +21,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            string date = item.Date.ToString("dd-MM-yyyy");
+            string date = item.Date.ToString("yyyy-MM-dd");
             <tr>
                 
                 <td> @date<span onclick="getProcessByProcessID(@Html.DisplayFor(modelItem => item.ProcessID)); " class="glyphicon glyphicon-pencil" style="color:limegreen; padding-left:20px; cursor: pointer;" title="Edit"></span></td>

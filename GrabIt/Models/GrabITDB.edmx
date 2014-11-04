@@ -74,6 +74,37 @@
           <Property Name="CategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Desc" Type="nchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="DOWNTIME">
+          <Key>
+            <PropertyRef Name="DownTimeID" />
+          </Key>
+          <Property Name="DownTimeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="StartTime" Type="datetime" Nullable="false" />
+          <Property Name="EndTime" Type="datetime" Nullable="false" />
+          <Property Name="Area" Type="int" Nullable="false" />
+          <Property Name="AffectedArea" Type="int" Nullable="false" />
+          <Property Name="Reason" Type="nchar" MaxLength="200" />
+          <Property Name="EquipmentTag" Type="nchar" MaxLength="100" Nullable="false" />
+          <Property Name="ResponsiblePerson" Type="nchar" MaxLength="100" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+          <Property Name="ShiftTypeID" Type="int" />
+        </EntityType>
+        <EntityType Name="GLOBALLOOKUP">
+          <Key>
+            <PropertyRef Name="LookupID" />
+          </Key>
+          <Property Name="LookupID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LookupCat" Type="int" Nullable="false" />
+          <Property Name="LookupDesc" Type="nchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LOOKUPCATEGORY">
+          <Key>
+            <PropertyRef Name="LookupCatID" />
+          </Key>
+          <Property Name="LookupCatID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LookupCatDesc" Type="nchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="MEASUREMENTLINK">
           <Key>
             <PropertyRef Name="ProcessTypeID" />
@@ -145,6 +176,16 @@
           <Property Name="ShiftTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Desc" Type="nchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
         <EntityType Name="USERS">
           <Key>
             <PropertyRef Name="UserID" />
@@ -152,6 +193,30 @@
           <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserName" Type="nchar" MaxLength="50" Nullable="false" />
           <Property Name="Password" Type="nchar" MaxLength="100" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'GrabIt.dbo.DOWNTIMEVIEW' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="DOWNTIMEVIEW">
+          <Key>
+            <PropertyRef Name="DownTimeID" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="StartTime" />
+            <PropertyRef Name="EndTime" />
+            <PropertyRef Name="Area" />
+            <PropertyRef Name="AffectedArea" />
+            <PropertyRef Name="EquipmentTag" />
+          </Key>
+          <Property Name="DownTimeID" Type="int" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="StartTime" Type="datetime" Nullable="false" />
+          <Property Name="EndTime" Type="datetime" Nullable="false" />
+          <Property Name="Area" Type="nchar" MaxLength="200" Nullable="false" />
+          <Property Name="AffectedArea" Type="nchar" MaxLength="200" Nullable="false" />
+          <Property Name="Reason" Type="nchar" MaxLength="200" />
+          <Property Name="EquipmentTag" Type="nchar" MaxLength="100" Nullable="false" />
+          <Property Name="ResponsiblePerson" Type="nchar" MaxLength="100" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+          <Property Name="ShiftType" Type="nchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'GrabIt.dbo.MEASUREMENTVIEW' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -243,6 +308,42 @@ warning 6002: The table/view 'GrabIt.dbo.ProcessesView' does not have a primary 
             </Principal>
             <Dependent Role="AspNetUserRoles">
               <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DOWNTIME_GLOBALLOOKUP2">
+          <End Role="GLOBALLOOKUP" Type="Self.GLOBALLOOKUP" Multiplicity="1" />
+          <End Role="DOWNTIME" Type="Self.DOWNTIME" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GLOBALLOOKUP">
+              <PropertyRef Name="LookupID" />
+            </Principal>
+            <Dependent Role="DOWNTIME">
+              <PropertyRef Name="Area" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DOWNTIME_GLOBALLOOKUP3">
+          <End Role="GLOBALLOOKUP" Type="Self.GLOBALLOOKUP" Multiplicity="1" />
+          <End Role="DOWNTIME" Type="Self.DOWNTIME" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GLOBALLOOKUP">
+              <PropertyRef Name="LookupID" />
+            </Principal>
+            <Dependent Role="DOWNTIME">
+              <PropertyRef Name="AffectedArea" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GLOBALLOOKUP_LOOKUPCATEGORY">
+          <End Role="LOOKUPCATEGORY" Type="Self.LOOKUPCATEGORY" Multiplicity="1" />
+          <End Role="GLOBALLOOKUP" Type="Self.GLOBALLOOKUP" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LOOKUPCATEGORY">
+              <PropertyRef Name="LookupCatID" />
+            </Principal>
+            <Dependent Role="GLOBALLOOKUP">
+              <PropertyRef Name="LookupCat" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -390,12 +491,43 @@ warning 6002: The table/view 'GrabIt.dbo.ProcessesView' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
         <Function Name="GetProcessesByDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Date" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="GetProcessesByDates" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Date" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="GrabItModelStoreContainer">
           <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
@@ -404,6 +536,9 @@ warning 6002: The table/view 'GrabIt.dbo.ProcessesView' does not have a primary 
           <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CATEGORIES" EntityType="Self.CATEGORIES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DOWNTIME" EntityType="Self.DOWNTIME" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GLOBALLOOKUP" EntityType="Self.GLOBALLOOKUP" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LOOKUPCATEGORY" EntityType="Self.LOOKUPCATEGORY" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MEASUREMENTLINK" EntityType="Self.MEASUREMENTLINK" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MEASUREMENTS" EntityType="Self.MEASUREMENTS" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MEASUREMENTTYPES" EntityType="Self.MEASUREMENTTYPES" Schema="dbo" store:Type="Tables" />
@@ -412,7 +547,23 @@ warning 6002: The table/view 'GrabIt.dbo.ProcessesView' does not have a primary 
           <EntitySet Name="PROCESSLINK" EntityType="Self.PROCESSLINK" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PROCESSTYPES" EntityType="Self.PROCESSTYPES" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SHIFTTYPES" EntityType="Self.SHIFTTYPES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="USERS" EntityType="Self.USERS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DOWNTIMEVIEW" EntityType="Self.DOWNTIMEVIEW" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [DOWNTIMEVIEW].[DownTimeID] AS [DownTimeID], 
+    [DOWNTIMEVIEW].[Date] AS [Date], 
+    [DOWNTIMEVIEW].[StartTime] AS [StartTime], 
+    [DOWNTIMEVIEW].[EndTime] AS [EndTime], 
+    [DOWNTIMEVIEW].[Area] AS [Area], 
+    [DOWNTIMEVIEW].[AffectedArea] AS [AffectedArea], 
+    [DOWNTIMEVIEW].[Reason] AS [Reason], 
+    [DOWNTIMEVIEW].[EquipmentTag] AS [EquipmentTag], 
+    [DOWNTIMEVIEW].[ResponsiblePerson] AS [ResponsiblePerson], 
+    [DOWNTIMEVIEW].[Notes] AS [Notes], 
+    [DOWNTIMEVIEW].[ShiftType] AS [ShiftType]
+    FROM [dbo].[DOWNTIMEVIEW] AS [DOWNTIMEVIEW]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="MEASUREMENTVIEW" EntityType="Self.MEASUREMENTVIEW" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [MEASUREMENTVIEW].[MeasurementTypeID] AS [MeasurementTypeID], 
@@ -451,6 +602,18 @@ warning 6002: The table/view 'GrabIt.dbo.ProcessesView' does not have a primary 
           <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DOWNTIME_GLOBALLOOKUP2" Association="Self.FK_DOWNTIME_GLOBALLOOKUP2">
+            <End Role="GLOBALLOOKUP" EntitySet="GLOBALLOOKUP" />
+            <End Role="DOWNTIME" EntitySet="DOWNTIME" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DOWNTIME_GLOBALLOOKUP3" Association="Self.FK_DOWNTIME_GLOBALLOOKUP3">
+            <End Role="GLOBALLOOKUP" EntitySet="GLOBALLOOKUP" />
+            <End Role="DOWNTIME" EntitySet="DOWNTIME" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GLOBALLOOKUP_LOOKUPCATEGORY" Association="Self.FK_GLOBALLOOKUP_LOOKUPCATEGORY">
+            <End Role="LOOKUPCATEGORY" EntitySet="LOOKUPCATEGORY" />
+            <End Role="GLOBALLOOKUP" EntitySet="GLOBALLOOKUP" />
           </AssociationSet>
           <AssociationSet Name="FK_MEASUREMENTLINK_MEASUREMENTTYPES" Association="Self.FK_MEASUREMENTLINK_MEASUREMENTTYPES">
             <End Role="MEASUREMENTTYPES" EntitySet="MEASUREMENTTYPES" />
@@ -927,6 +1090,53 @@ warning 6002: The table/view 'GrabIt.dbo.ProcessesView' does not have a primary 
           <Parameter Name="Date" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="MEASUREMENTVIEWs" EntityType="GrabItModel.MEASUREMENTVIEW" />
+          <EntitySet Name="DOWNTIMEs" EntityType="GrabItModel.DOWNTIME" />
+          <EntitySet Name="GLOBALLOOKUPs" EntityType="GrabItModel.GLOBALLOOKUP" />
+          <EntitySet Name="LOOKUPCATEGORies" EntityType="GrabItModel.LOOKUPCATEGORY" />
+          <EntitySet Name="sysdiagrams" EntityType="GrabItModel.sysdiagram" />
+          <EntitySet Name="DOWNTIMEVIEWs" EntityType="GrabItModel.DOWNTIMEVIEW" />
+          <AssociationSet Name="FK_DOWNTIME_GLOBALLOOKUP2" Association="GrabItModel.FK_DOWNTIME_GLOBALLOOKUP2">
+            <End Role="GLOBALLOOKUP" EntitySet="GLOBALLOOKUPs" />
+            <End Role="DOWNTIME" EntitySet="DOWNTIMEs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DOWNTIME_GLOBALLOOKUP3" Association="GrabItModel.FK_DOWNTIME_GLOBALLOOKUP3">
+            <End Role="GLOBALLOOKUP" EntitySet="GLOBALLOOKUPs" />
+            <End Role="DOWNTIME" EntitySet="DOWNTIMEs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GLOBALLOOKUP_LOOKUPCATEGORY" Association="GrabItModel.FK_GLOBALLOOKUP_LOOKUPCATEGORY">
+            <End Role="LOOKUPCATEGORY" EntitySet="LOOKUPCATEGORies" />
+            <End Role="GLOBALLOOKUP" EntitySet="GLOBALLOOKUPs" />
+          </AssociationSet>
+          <FunctionImport Name="sp_alterdiagram1">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram1">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram1">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition1" ReturnType="Collection(GrabItModel.sp_helpdiagramdefinition1_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams1" ReturnType="Collection(GrabItModel.sp_helpdiagrams1_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram1">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams1" />
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -982,6 +1192,122 @@ warning 6002: The table/view 'GrabIt.dbo.ProcessesView' does not have a primary 
           <Property Name="LowerLimit" Type="Double" />
           <Property Name="UpperLimit" Type="Double" />
         </EntityType>
+        <EntityType Name="DOWNTIME">
+          <Key>
+            <PropertyRef Name="DownTimeID" />
+          </Key>
+          <Property Name="DownTimeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="StartTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Area" Type="Int32" Nullable="false" />
+          <Property Name="AffectedArea" Type="Int32" Nullable="false" />
+          <Property Name="Reason" Type="String" MaxLength="200" FixedLength="true" Unicode="true" />
+          <Property Name="EquipmentTag" Type="String" Nullable="false" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="ResponsiblePerson" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ShiftTypeID" Type="Int32" />
+          <NavigationProperty Name="GLOBALLOOKUP" Relationship="GrabItModel.FK_DOWNTIME_GLOBALLOOKUP2" FromRole="DOWNTIME" ToRole="GLOBALLOOKUP" />
+          <NavigationProperty Name="GLOBALLOOKUP1" Relationship="GrabItModel.FK_DOWNTIME_GLOBALLOOKUP3" FromRole="DOWNTIME" ToRole="GLOBALLOOKUP" />
+        </EntityType>
+        <EntityType Name="GLOBALLOOKUP">
+          <Key>
+            <PropertyRef Name="LookupID" />
+          </Key>
+          <Property Name="LookupID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LookupCat" Type="Int32" Nullable="false" />
+          <Property Name="LookupDesc" Type="String" Nullable="false" MaxLength="200" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="DOWNTIMEs" Relationship="GrabItModel.FK_DOWNTIME_GLOBALLOOKUP2" FromRole="GLOBALLOOKUP" ToRole="DOWNTIME" />
+          <NavigationProperty Name="DOWNTIMEs1" Relationship="GrabItModel.FK_DOWNTIME_GLOBALLOOKUP3" FromRole="GLOBALLOOKUP" ToRole="DOWNTIME" />
+          <NavigationProperty Name="LOOKUPCATEGORY" Relationship="GrabItModel.FK_GLOBALLOOKUP_LOOKUPCATEGORY" FromRole="GLOBALLOOKUP" ToRole="LOOKUPCATEGORY" />
+        </EntityType>
+        <EntityType Name="LOOKUPCATEGORY">
+          <Key>
+            <PropertyRef Name="LookupCatID" />
+          </Key>
+          <Property Name="LookupCatID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LookupCatDesc" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="GLOBALLOOKUPs" Relationship="GrabItModel.FK_GLOBALLOOKUP_LOOKUPCATEGORY" FromRole="LOOKUPCATEGORY" ToRole="GLOBALLOOKUP" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="DOWNTIMEVIEW">
+          <Key>
+            <PropertyRef Name="DownTimeID" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="StartTime" />
+            <PropertyRef Name="EndTime" />
+            <PropertyRef Name="Area" />
+            <PropertyRef Name="AffectedArea" />
+            <PropertyRef Name="EquipmentTag" />
+          </Key>
+          <Property Name="DownTimeID" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="StartTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Area" Type="String" Nullable="false" MaxLength="200" FixedLength="true" Unicode="true" />
+          <Property Name="AffectedArea" Type="String" Nullable="false" MaxLength="200" FixedLength="true" Unicode="true" />
+          <Property Name="Reason" Type="String" MaxLength="200" FixedLength="true" Unicode="true" />
+          <Property Name="EquipmentTag" Type="String" Nullable="false" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="ResponsiblePerson" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ShiftType" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_DOWNTIME_GLOBALLOOKUP2">
+          <End Type="GrabItModel.GLOBALLOOKUP" Role="GLOBALLOOKUP" Multiplicity="1" />
+          <End Type="GrabItModel.DOWNTIME" Role="DOWNTIME" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GLOBALLOOKUP">
+              <PropertyRef Name="LookupID" />
+            </Principal>
+            <Dependent Role="DOWNTIME">
+              <PropertyRef Name="Area" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DOWNTIME_GLOBALLOOKUP3">
+          <End Type="GrabItModel.GLOBALLOOKUP" Role="GLOBALLOOKUP" Multiplicity="1" />
+          <End Type="GrabItModel.DOWNTIME" Role="DOWNTIME" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GLOBALLOOKUP">
+              <PropertyRef Name="LookupID" />
+            </Principal>
+            <Dependent Role="DOWNTIME">
+              <PropertyRef Name="AffectedArea" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GLOBALLOOKUP_LOOKUPCATEGORY">
+          <End Type="GrabItModel.LOOKUPCATEGORY" Role="LOOKUPCATEGORY" Multiplicity="1" />
+          <End Type="GrabItModel.GLOBALLOOKUP" Role="GLOBALLOOKUP" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LOOKUPCATEGORY">
+              <PropertyRef Name="LookupCatID" />
+            </Principal>
+            <Dependent Role="GLOBALLOOKUP">
+              <PropertyRef Name="LookupCat" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="sp_helpdiagramdefinition1_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams1_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1174,6 +1500,92 @@ warning 6002: The table/view 'GrabIt.dbo.ProcessesView' does not have a primary 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="DOWNTIMEs">
+            <EntityTypeMapping TypeName="GrabItModel.DOWNTIME">
+              <MappingFragment StoreEntitySet="DOWNTIME">
+                <ScalarProperty Name="ShiftTypeID" ColumnName="ShiftTypeID" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="ResponsiblePerson" ColumnName="ResponsiblePerson" />
+                <ScalarProperty Name="EquipmentTag" ColumnName="EquipmentTag" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="AffectedArea" ColumnName="AffectedArea" />
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="DownTimeID" ColumnName="DownTimeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GLOBALLOOKUPs">
+            <EntityTypeMapping TypeName="GrabItModel.GLOBALLOOKUP">
+              <MappingFragment StoreEntitySet="GLOBALLOOKUP">
+                <ScalarProperty Name="LookupDesc" ColumnName="LookupDesc" />
+                <ScalarProperty Name="LookupCat" ColumnName="LookupCat" />
+                <ScalarProperty Name="LookupID" ColumnName="LookupID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LOOKUPCATEGORies">
+            <EntityTypeMapping TypeName="GrabItModel.LOOKUPCATEGORY">
+              <MappingFragment StoreEntitySet="LOOKUPCATEGORY">
+                <ScalarProperty Name="LookupCatDesc" ColumnName="LookupCatDesc" />
+                <ScalarProperty Name="LookupCatID" ColumnName="LookupCatID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="GrabItModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DOWNTIMEVIEWs">
+            <EntityTypeMapping TypeName="GrabItModel.DOWNTIMEVIEW">
+              <MappingFragment StoreEntitySet="DOWNTIMEVIEW">
+                <ScalarProperty Name="ShiftType" ColumnName="ShiftType" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="ResponsiblePerson" ColumnName="ResponsiblePerson" />
+                <ScalarProperty Name="EquipmentTag" ColumnName="EquipmentTag" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="AffectedArea" ColumnName="AffectedArea" />
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="DownTimeID" ColumnName="DownTimeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram1" FunctionName="GrabItModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram1" FunctionName="GrabItModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram1" FunctionName="GrabItModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition1" FunctionName="GrabItModel.Store.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GrabItModel.sp_helpdiagramdefinition1_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams1" FunctionName="GrabItModel.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="GrabItModel.sp_helpdiagrams1_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram1" FunctionName="GrabItModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams1" FunctionName="GrabItModel.Store.sp_upgraddiagrams" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

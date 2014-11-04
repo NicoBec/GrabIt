@@ -35,6 +35,14 @@
         <AssociationConnector Association="GrabItModel.PROCESSLINK" ManuallyRouted="false" />
         <EntityTypeShape EntityType="GrabItModel.ProcessesView" Width="1.5" PointX="0.75" PointY="11.75" />
         <EntityTypeShape EntityType="GrabItModel.MEASUREMENTVIEW" Width="1.5" PointX="3.375" PointY="11.75" />
+        <EntityTypeShape EntityType="GrabItModel.DOWNTIME" Width="1.5" PointX="17.875" PointY="1" />
+        <EntityTypeShape EntityType="GrabItModel.GLOBALLOOKUP" Width="1.5" PointX="15.625" PointY="1.625" />
+        <EntityTypeShape EntityType="GrabItModel.LOOKUPCATEGORY" Width="1.5" PointX="13.375" PointY="2" />
+        <EntityTypeShape EntityType="GrabItModel.sysdiagram" Width="1.5" PointX="10.375" PointY="6.75" />
+        <EntityTypeShape EntityType="GrabItModel.DOWNTIMEVIEW" Width="1.5" PointX="5.375" PointY="11.75" />
+        <AssociationConnector Association="GrabItModel.FK_DOWNTIME_GLOBALLOOKUP2" />
+        <AssociationConnector Association="GrabItModel.FK_DOWNTIME_GLOBALLOOKUP3" />
+        <AssociationConnector Association="GrabItModel.FK_GLOBALLOOKUP_LOOKUPCATEGORY" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
