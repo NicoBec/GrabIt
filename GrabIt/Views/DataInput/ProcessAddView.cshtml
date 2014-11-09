@@ -1,45 +1,14 @@
 ﻿
 <h4>Please enter the process details.</h4>
 <script type="text/javascript">
-    //$(document).ready(function () {
-
-    //$("#addProcessForm").validate({
-    //    rules: {
-    //        TxtStartTime: "required",
-    //        TxtEndTime: "required",
-
-
-
-    //    },
-    //    messages: {
-    //        TxtStartTime: "",//Please enter the start time
-    //        TxtEndTime: "",//Please enter the end time
-    //    },
-    //    submitHandler: function (form) {
-    //        //form.submit();
-    //        console.log("Valid");
-    //    }
-    //});
-
-    $('#addProcessForm').bootstrapValidator();
-    //    {
-    //    feedbackIcons: {
-    //        valid: 'glyphicon glyphicon-ok',
-    //        invalid: 'glyphicon glyphicon-remove',
-    //        validating: 'glyphicon glyphicon-refresh'
-    //    },
-    //    fields: {
-    //        TxtEndTime: {
-    //            validators: {
-    //                notEmpty: {
-    //                    message: 'The password is required and cannot be empty'
-    //                }
-    //            }
-    //        }
-    //    }
-    //});
+    $(document).ready(function () {
+      
+    });
 
     function validateAndSaveProcess() {
+
+        if (!validateAddProcess()) return false;
+
         var ProcObj = {
 
             ShiftTypeID: $("#SelShiftType").val(),
@@ -49,12 +18,12 @@
             ProcessTypeID: $("#SelProcessType").val(),
             UserID: 1,
             Completed: false,
-            ProcessID: selectedProcess 
+            ProcessID: selectedProcess
         }
         console.log(ProcObj);
 
         $.ajax({
-            url: '@(Url.Action("AddProcess", "DataInput"))', 
+            url: '@(Url.Action("AddProcess", "DataInput"))',
             data: ProcObj,
             success: function (data) {
                 getMeasurements(data, $("#SelProcessType").val());
@@ -67,6 +36,64 @@
             }
         });
     }
+    function validateStartTime() {
+        var val = $("#TxtStartTime").val();
+        if (val == "") {
+            $("#divStartTime").addClass("has-error");
+            return false;
+        } else {
+            $("#divStartTime").removeClass("has-error");
+            return true;
+        }
+
+    }
+    function validateEndTime() {
+        var val = $("#TxtEndTime").val();
+        if (val == "") {
+            $("#divEndTime").addClass("has-error");
+            return false;
+        } else {
+            $("#divEndTime").removeClass("has-error");
+            return true;
+        }
+
+    }
+    function validateShiftType() {
+        var val = $("#SelShiftType").val();
+        if (val == "") {
+            $("#divShiftType").addClass("has-error");
+            return false;
+        } else {
+            $("#divShiftType").removeClass("has-error");
+            return true;
+        }
+
+    }
+    function validateCatType() {
+        var val = $("#SelCatType").val();
+        if (val == "") {
+            $("#divCatType").addClass("has-error");
+            return false;
+        } else {
+            $("#divCatType").removeClass("has-error");
+            return true;
+        }
+
+    }
+    function validateProcessType() {
+        var val = $("#SelProcessType").val();
+        if (val == "") {
+            $("#divProcessType").addClass("has-error");
+            return false;
+        } else {
+            $("#divProcessType").removeClass("has-error");
+            return true;
+        }
+
+    }
+    function validateAddProcess() {
+        return validateStartTime() & validateEndTime() & validateShiftType() & validateCatType() & validateProcessType();
+    }
 
 </script>
 
@@ -77,22 +104,20 @@
             <div class="col-xs-5">
                 @{Html.RenderAction("GetShiftType", "DataInput");}
 
-                <div class="form-group col-md-6" style="margin-left: -60px;">
+                <div id="divStartTime" class="form-group col-md-6" style="margin-left: -60px;">
                     <div class="col-xs-12">
                         <label class="col-xs-8 control-label" for="TxtStartTime">Start Time:</label>
                         <div class="col-xs-10">
-                            <input id="TxtStartTime" type="time" class="form-control"
-                                   required
-                                   data-bv-notempty-message="The username is required">
+                            <input id="TxtStartTime" type="time" class="form-control" name="TxtStartTime" onchange="validateStartTime();">
                         </div>
                     </div>
                 </div>
 
-                <div class="form-group col-md-6" style="margin-left: -45px;">
+                <div id="divEndTime" class="form-group col-md-6" style="margin-left: -45px;">
                     <div class="col-xs-12">
                         <label class="col-xs-8 control-label" for="TxtEndTime">End Time:</label>
                         <div class="col-xs-10">
-                            <input id="TxtEndTime" type="time" class="form-control" required data-bv-notempty-message="Required">
+                            <input id="TxtEndTime" type="time" class="form-control" onchange="validateEndTime();">
                         </div>
                     </div>
                 </div>
@@ -110,7 +135,7 @@
         </div>
         <div class="row">
             <div class="form-group">
-                <input id="BtnAddProcess" type="button" class="btn btn-default" value="Add" onclick="validateAndSaveProcess();" />
+                <input id="BtnAddProcess" type="button" class="btn btn-default" style="margin-left: 15px;margin-top: 20px;"value="Add" onclick="validateAndSaveProcess();" />
                 <div class="horizontalRule"></div>
             </div>
         </div>

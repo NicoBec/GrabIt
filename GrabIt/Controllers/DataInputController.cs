@@ -140,9 +140,20 @@ namespace GrabIt.Controllers
             {
                 db.MEASUREMENTS.Add(Measure);
             }
-
-
             db.SaveChanges();
+
+            int pt = db.PROCESSES.Where(item => item.ProcessID == Measure.ProcessID).Select(row => row.ProcessTypeID).SingleOrDefault();
+            int count = db.MEASUREMENTLINKs.Where(item => item.ProcessTypeID == pt).Count();
+            int mesCount = db.MEASUREMENTS.Where(item => item.ProcessID == Measure.ProcessID).Count();
+            if (count == mesCount)
+            {
+                PROCESS pros = db.PROCESSES.SingleOrDefault(item => item.ProcessID == Measure.ProcessID);
+                pros.Completed = true;
+                db.SaveChanges();
+            }
+
+
+           
             return Measure.ProcessID;
         }
     }

@@ -1,9 +1,9 @@
 ﻿@model IEnumerable<GrabIt.Models.PROCESSTYPE>
 
-<div class="form-group">
+<div id="divProcessType" class="form-group">
     <label class="col-sx-2 control-label" for="SelProcessType">Process Type:</label>
     <div class="col-sx-10">
-        <select id="SelProcessType" class="form-control">
+        <select id="SelProcessType" class="form-control" onchange=" validateProcessType();">
             <option value="">Please Select</option>
             @foreach (var item in Model)
             {

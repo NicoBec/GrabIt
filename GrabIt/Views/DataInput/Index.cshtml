@@ -25,7 +25,7 @@
                     $("#ProcessBlock").html(data).slideDown('slow');
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
-                    alert('Failed to retrieve books.');
+                    console.log(thrownError);
                 }
             });
         });
@@ -111,21 +111,27 @@
         if (currentProcessID == 0) {
             return false;
         }
+        var allDone = true;
         $.each(MeasurementsList, function (index, item) {
-            debugger;
             var val = $("#" + item.MeasurementTypeID).val();
             console.log($.trim(item.Desc) + ": " + val)
             if (val != "") {
+                MeasurementCount++;
                 var obj = {
                     ProcessID: currentProcessID,
                     MeasurementTypeID: item.MeasurementTypeID,
                     Value: val
                 }
                 saveMeasurement(obj);
+            } else {
+                allDone = false;
             }
-
-
         });
+        $("#ProcessBlock").hide("slow");
+        $("#MeasurementsBlock").hide("slow");
+        dateChanged();
+        $("#BtnAddShift").attr("disabled", false);
+
     }
     function saveMeasurement(MeasurmentObject) {
         console.log(MeasurmentObject);
@@ -133,10 +139,9 @@
             url: '@(Url.Action("AddMeasurement", "DataInput"))',
             data: MeasurmentObject,
             success: function (data) {
-                console.log(data);
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                console.log(thrownError);
+
             }
         });
     }
@@ -151,7 +156,7 @@
                 if (data) {
                     selectedProcess = data;
                     $("#BtnAddShift").attr("disabled", true);
-                    $("#ProcessBlock").slideUp('slow');
+                    $("#ProcessBlock").slideUp();
                     $.ajax({
                         url: '@(Url.Action("ProcessAddView", "DataInput"))',
                         data: {},
@@ -164,6 +169,9 @@
                             $("#SelCatType").change();
                             $("#TxtStartTime").val($.trim(selectedProcess.StartTime));
                             $("#TxtEndTime").val($.trim(selectedProcess.EndTime));
+                            $("#SelShiftType").attr("disabled", true);
+                            $("#SelCatType").attr("disabled", true);
+                          
                             $("#ProcessBlock").slideDown("slow");
                             $.when(
                              getMeasurements(ProcessID, selectedProcess.ProcessTypeID),
@@ -184,6 +192,7 @@
         });
     }
     var MeasurementsList = [];
+    var MeasurementCount = 0;
     var selectedProcess = null;
     var currentProcessID = 0;
 

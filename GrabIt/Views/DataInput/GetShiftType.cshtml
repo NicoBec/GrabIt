@@ -1,9 +1,9 @@
 ﻿@model IEnumerable<GrabIt.Models.SHIFTTYPE>
 
-<div class="form-group">
+<div id="divShiftType" class="form-group">
     <label class="col-sx-2 control-label" for="SelShiftType">Shift Type:</label>
     <div class="col-sx-10">
-        <select id="SelShiftType" class="form-control">
+        <select id="SelShiftType" class="form-control" onchange="validateShiftType();">
             <option value="">Please Select</option>
             @foreach (var item in Model)
             {

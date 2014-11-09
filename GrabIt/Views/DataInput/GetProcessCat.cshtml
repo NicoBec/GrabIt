@@ -11,7 +11,10 @@
                 success: function (data) {
                     $("#DivProcessType").html(data).slideDown('slow');
                     if (selectedProcess) {
+
                         $("#SelProcessType").val(selectedProcess.ProcessTypeID);
+
+                        $("#SelProcessType").attr("disabled", true);
                     }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
@@ -25,10 +28,10 @@
 
 </script>
 
-<div class="form-group">
+<div id="divCatType" class="form-group">
     <label class="col-sx-2 control-label" for="SelCatType">Process Category: </label>
     <div class="col-sx-10">
-        <select id="SelCatType" class="form-control">
+        <select id="SelCatType" class="form-control" onchange="validateCatType();">
             <option value="">Please Select</option>
             @foreach (var item in Model)
             {
