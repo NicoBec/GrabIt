@@ -29,6 +29,11 @@
                 getMeasurements(data, $("#SelProcessType").val());
                 selectedProcess = data;
                 dateChanged();
+
+                $("#SelShiftType").attr("disabled", true);
+                $("#SelCatType").attr("disabled", true);
+                $("#SelProcessType").attr("disabled", true);
+                
                 $("#BtnAddProcess").val("Save");
             },
             error: function (xhr, ajaxOptions, thrownError) {
