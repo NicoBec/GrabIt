@@ -106,6 +106,23 @@ namespace GrabIt.Controllers
             return Json(items, JsonRequestBehavior.AllowGet);
 
         }
+        public int checkProcessExist(PROCESS prs)
+        {
+
+            PROCESS current = db.PROCESSES.SingleOrDefault(item => item.ShiftTypeID == prs.ShiftTypeID && item.Date == prs.Date && item.ProcessTypeID == prs.ProcessTypeID);
+            if (current != null)
+            {
+                return current.ProcessID;
+            }
+            else
+            {
+                return 0;
+            }
+
+
+           
+            return prs.ProcessID;
+        }
         public int AddProcess(PROCESS prs)
         {
 

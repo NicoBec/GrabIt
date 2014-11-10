@@ -1,10 +1,6 @@
 ﻿
 <h4>Please enter the process details.</h4>
 <script type="text/javascript">
-    $(document).ready(function () {
-      
-    });
-
     function validateAndSaveProcess() {
 
         if (!validateAddProcess()) return false;
@@ -20,26 +16,63 @@
             Completed: false,
             ProcessID: selectedProcess
         }
-        console.log(ProcObj);
+
 
         $.ajax({
-            url: '@(Url.Action("AddProcess", "DataInput"))',
+            url: '@(Url.Action("checkProcessExist", "DataInput"))',
             data: ProcObj,
-            success: function (data) {
-                getMeasurements(data, $("#SelProcessType").val());
-                selectedProcess = data;
-                dateChanged();
+            success: function (CheckedID) {
+                if (CheckedID == 0 || $("#BtnAddProcess").val() == "Save") {
+                    $.ajax({
+                        url: '@(Url.Action("AddProcess", "DataInput"))',
+                        data: ProcObj,
+                        success: function (data) {
+                            if (CheckedID == 0) getMeasurements(data, $("#SelProcessType").val());
+                            selectedProcess = data;
+                            dateChanged();
 
-                $("#SelShiftType").attr("disabled", true);
-                $("#SelCatType").attr("disabled", true);
-                $("#SelProcessType").attr("disabled", true);
-                
-                $("#BtnAddProcess").val("Save");
+                            $("#SelShiftType").attr("disabled", true);
+                            $("#SelCatType").attr("disabled", true);
+                            $("#SelProcessType").attr("disabled", true);
+
+                            $("#BtnAddProcess").val("Save");
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            console.log(thrownError);
+                        }
+                    });
+                } else {
+                    BootstrapDialog.show({
+                        message: 'The Shift has been captured, do you want to edit it?',
+                        buttons: [{
+                            label: 'Cancel',
+                            //cssClass: 'btn-primary',
+                            action: function (dialogRef) {
+                                dateChanged();
+                                $("#ProcessBlock").hide("slow");
+                                $("#MeasurementsBlock").hide("slow");
+                                dateChanged();
+                                $("#BtnAddShift").attr("disabled", false);
+                                dialogRef.close();
+                            }
+                        }, {
+                            label: 'OK',
+                            cssClass: 'btn-primary',
+                            action: function (dialogRef) {
+                                getProcessByProcessID(CheckedID);
+                                dialogRef.close();
+                            }
+                        }],
+                        type: BootstrapDialog.TYPE_WARNING,
+                        closable: false,
+                    });
+                }
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log(thrownError);
             }
         });
+
     }
     function validateStartTime() {
         var val = $("#TxtStartTime").val();
@@ -140,7 +173,7 @@
         </div>
         <div class="row">
             <div class="form-group">
-                <input id="BtnAddProcess" type="button" class="btn btn-default" style="margin-left: 15px;margin-top: 20px;"value="Add" onclick="validateAndSaveProcess();" />
+                <input id="BtnAddProcess" type="button" class="btn btn-default" style="margin-left: 15px;margin-top: 20px;" value="Add" onclick="validateAndSaveProcess();" />
                 <div class="horizontalRule"></div>
             </div>
         </div>

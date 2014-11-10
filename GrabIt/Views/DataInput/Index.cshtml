@@ -18,6 +18,11 @@
 
         $("#BtnAddShift").click(function () {
             $("#ProcessBlock").slideUp('slow');
+
+            selectedProcess = null
+            $("#SelShiftType").attr("disabled", false);
+            $("#SelProcessType").attr("disabled", false);
+           // $("#SelCatType").attr("disabled", false);
             $.ajax({
                 url: '@(Url.Action("ProcessAddView", "DataInput"))',
                 data: {},
