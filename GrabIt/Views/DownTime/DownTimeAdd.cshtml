@@ -1,4 +1,6 @@
 ﻿<script type="text/javascript">
+    var editObj = null;
+
     $(document).ready(function () {
 
         $("#DownTimeDate").datepicker({ dateFormat: 'yy-mm-dd' });
@@ -37,6 +39,7 @@
                 });
             },
             minLength: 3,
+            change: function (event, ui) { validateEquipmentTag(); }
         });
 
         $("#txtReason").autocomplete({
@@ -63,6 +66,7 @@
                 });
             },
             minLength: 3,
+            change: function (event, ui) { validateReason(); }
         });
         $("#txtResponsiblePerson").autocomplete({
             source: function (request, response) {
@@ -88,15 +92,19 @@
                 });
             },
             minLength: 3,
+            change: function (event, ui) { validateResponsiblePerson(); }
         });
 
         $("#").val();
-       
+
 
 
     });
 
     function validateAndSaveDowntime() {
+
+        if (!validateDownTimeForm()) return false;
+
         var date = $("#DownTimeDate").val();
         var starttm = $("#TxtStartTime").val();
         var endtm = $("#TxtEndTime").val();
@@ -122,19 +130,173 @@
             shiftType: parseInt($("#SelShiftType").val()),
             addOneDay: addOneDay
         };
+        $("html, body").animate({ scrollTop: 0 }, 700, function () {
+            if (editObj) {
+                data.DownTimeID = editObj.DownTimeID;
+
+                $.ajax({
+                    dataType: "json",
+                    type: 'POST',
+                    url: '@Url.Action("updateDownTime", "DownTime")',
+                    data: data,
+                    success: function (data) {
+                        location.reload();
+                    },
+                    error: function (data) {
+                        console.log("error");
+                    }
+                });
+            } else {
+                $.ajax({
+                    dataType: "json",
+                    type: 'POST',
+                    url: '@Url.Action("AddDownTime", "DownTime")',
+                    data: data,
+                    success: function (data) {
+                        location.reload();
+                    },
+                    error: function (data) {
+                        console.log("error");
+                    }
+                });
+            }
+        });
+    }
+
+    function getDowntimeByID(id) {
         $.ajax({
-            dataType: "json",
-            type: 'POST',
-            url: '@Url.Action("AddDownTime", "DownTime")',
-            data: data,
+            url: '@(Url.Action("getDownTimeByID", "DownTime"))',
+            data: { DownTimeID: id },
+            type: "POST",
             success: function (data) {
-                location.reload();
+                editObj = data;
+
+                $("#DownTimeDate").val(data.Date)
+
+                $("#SelArea").val(data.Area);
+                $("#SelAffectedArea").val(data.AffectedArea);
+                $("#txtResponsiblePerson").val(data.ResponsiblePerson);
+                $("#TxtStartTime").val(data.StartTime);
+                $("#TxtEndTime").val(data.EndTime);
+                $("#SelShiftType").val(data.ShiftTypeID);
+                $("#txtReason").val(data.Reason);
+                $("#txtEquipmentTag").val(data.EquipmentTag);
+                $("#txtaNotes").val(data.Notes);
+
+                $("#BtnAddDowntime").val("Save");
+                $("html, body").animate({ scrollTop: $(document).height() }, 1000);
             },
-            error: function (data) {
-                console.log("error");
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(thrownError);
             }
         });
 
+
+    }
+
+    function validateArea() {
+        var val = $("#SelArea").val();
+        if (val == "") {
+            $("#divArea").addClass("has-error");
+            return false;
+        } else {
+            $("#divArea").removeClass("has-error");
+            return true;
+        }
+
+    }
+    function validateAffectedArea() {
+        var val = $("#SelAffectedArea").val();
+        if (val == "") {
+            $("#divAffectedArea").addClass("has-error");
+            return false;
+        } else {
+            $("#divAffectedArea").removeClass("has-error");
+            return true;
+        }
+
+    }
+    function validateResponsiblePerson() {
+        var val = $("#txtResponsiblePerson").val();
+        if (val == "") {
+            $("#divResponsiblePerson").addClass("has-error");
+            return false;
+        } else {
+            $("#divResponsiblePerson").removeClass("has-error");
+            return true;
+        }
+
+    }
+    function validateStartTime() {
+        var val = $("#TxtStartTime").val();
+        if (val == "") {
+            $("#divStartTime").addClass("has-error");
+            return false;
+        } else {
+            $("#divStartTime").removeClass("has-error");
+            return true;
+        }
+
+    }
+    function validateEndTime() {
+        var val = $("#TxtEndTime").val();
+        if (val == "") {
+            $("#divEndTime").addClass("has-error");
+            return false;
+        } else {
+            $("#divEndTime").removeClass("has-error");
+            return true;
+        }
+
+    }
+    function validateShiftType() {
+        var val = $("#SelShiftType").val();
+        if (val == "") {
+            $("#divShiftType").addClass("has-error");
+            return false;
+        } else {
+            $("#divShiftType").removeClass("has-error");
+            return true;
+        }
+
+    }
+    function validateReason() {
+        var val = $("#txtReason").val();
+        if (val == "") {
+            $("#divReason").addClass("has-error");
+            return false;
+        } else {
+            $("#divReason").removeClass("has-error");
+            return true;
+        }
+
+    }
+    function validateEquipmentTag() {
+        var val = $("#txtEquipmentTag").val();
+        if (val == "") {
+            $("#divEquipmentTag").addClass("has-error");
+            return false;
+        } else {
+            $("#divEquipmentTag").removeClass("has-error");
+            return true;
+        }
+
+    }
+    function validateNotes() {
+        var val = $("#txtaNotes").val();
+        if (val == "") {
+            $("#divaNotes").addClass("has-error");
+            return false;
+        } else {
+            $("#divaNotes").removeClass("has-error");
+            return true;
+        }
+
+    }
+
+    function validateDownTimeForm() {
+        return validateArea() & validateAffectedArea() & validateResponsiblePerson() & validateStartTime()
+            & validateEndTime() & validateShiftType() & validateReason() & validateEquipmentTag() & validateNotes();
     }
 </script>
 <h4>Add Downtime</h4>
@@ -150,10 +312,10 @@
                         <input id="DownTimeDate" type="text" class="form-control" onchange="" />
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="divArea">
                     <label class="col-sx-2 control-label" for="SelArea">Area: </label>
                     <div class="col-sx-10">
-                        <select id="SelArea" class="form-control">
+                        <select id="SelArea" class="form-control" onchange="validateArea();">
                             <option value="">Please Select</option>
                             @foreach (var item in ViewBag.Area)
                             {
@@ -162,10 +324,10 @@
                         </select>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="divAffectedArea">
                     <label class="col-sx-2 control-label" for="SelAffectedArea">Affected Area: </label>
                     <div class="col-sx-10">
-                        <select id="SelAffectedArea" class="form-control">
+                        <select id="SelAffectedArea" class="form-control" onchange="validateAffectedArea();">
                             <option value="">Please Select</option>
                             @foreach (var item in ViewBag.AffectedArea)
                             {
@@ -174,28 +336,26 @@
                         </select>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="divResponsiblePerson">
                     <label class="col-sx-2 control-label" for="txtResponsiblePerson">Responsible Person:</label>
                     <div class="col-sx-10">
-                        <input id="txtResponsiblePerson" type="text" class="form-control" onchange="" />
+                        <input id="txtResponsiblePerson" type="text" class="form-control" onchange="validateResponsiblePerson();" />
                     </div>
                 </div>
-                <div class="form-group col-md-6" style="margin-left: -60px;">
+                <div class="form-group col-md-6" style="margin-left: -60px;" id="divStartTime">
                     <div class="col-xs-12">
                         <label class="col-xs-8 control-label" for="TxtStartTime">Start Time:</label>
                         <div class="col-xs-10">
-                            <input id="TxtStartTime" type="time" class="form-control"
-                                   required
-                                   data-bv-notempty-message="The username is required">
+                            <input id="TxtStartTime" type="time" class="form-control" onchange="validateStartTime();">
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="form-group col-md-6" style="margin-left: -45px;">
+                    <div class="form-group col-md-6" style="margin-left: -45px;" id="divEndTime">
                         <div class="col-xs-12">
                             <label class="col-xs-8 control-label" for="TxtEndTime">End Time:</label>
                             <div class="col-xs-10">
-                                <input id="TxtEndTime" type="time" class="form-control" required data-bv-notempty-message="Required">
+                                <input id="TxtEndTime" type="time" class="form-control" onchange="validateEndTime();">
                             </div>
                         </div>
                     </div>
@@ -203,10 +363,10 @@
             </div>
             <div class="col-xs-5">
                 <div class="form-group col-md-10">
-                    <div class="form-group">
+                    <div class="form-group" id="divShiftType">
                         <label class="col-sx-2 control-label" for="SelShiftType">Shift Type: </label>
                         <div class="col-sx-10">
-                            <select id="SelShiftType" class="form-control">
+                            <select id="SelShiftType" class="form-control" onchange="validateShiftType();">
                                 <option value="">Please Select</option>
                                 @foreach (var item in ViewBag.ShiftType)
                                 {
@@ -215,28 +375,28 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="divReason">
                         <label class="col-sx-2 control-label" for="txtReason">Reason:</label>
                         <div class="col-sx-10">
-                            <input id="txtReason" type="text" class="form-control" onchange="" />
+                            <input id="txtReason" type="text" class="form-control" onchange="validateReason();" />
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="divEquipmentTag">
                         <label class="col-sx-2 control-label" for="txtEquipmentTag">Equipment Tag:</label>
                         <div class="col-sx-10">
-                            <input id="txtEquipmentTag" type="text" class="form-control" onchange="" />
+                            <input id="txtEquipmentTag" type="text" class="form-control" onchange="validateEquipmentTag();" />
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="comment">Notes:</label>
-                        <textarea class="form-control" rows="5" id="txtaNotes"></textarea>
+                    <div class="form-group" id="divaNotes">
+                        <label class="col-sx-2 control-label" for="txtaNotes">Notes:</label>
+                        <textarea class="form-control" rows="5" id="txtaNotes" onchange="validateNotes();"></textarea>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="form-group">
-                <input id="BtnAddProcess" type="button" class="btn btn-default" value="Add" onclick="validateAndSaveProcess();" />
+                <input id="BtnAddDowntime" type="button" class="btn btn-default" value="Add" onclick="validateAndSaveDowntime();" />
                 <div class="horizontalRule"></div>
             </div>
 

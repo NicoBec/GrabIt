@@ -71,6 +71,76 @@ namespace GrabIt.Controllers
             db.SaveChanges();
             return newDT.DownTimeID;
         }
-        
+        public int updateDownTime(int DownTimeID, string date, string startDatetime, string endDatetime, int area, int affectedArea, string reason, string equipmentTag, string responsiblePerson, string notes, int shiftType, bool addOneDay)
+        {
+            DOWNTIME newDT = db.DOWNTIMEs.Where(item => item.DownTimeID == DownTimeID).SingleOrDefault();
+
+            newDT.Date = DateTime.Parse(date);
+            newDT.StartTime = DateTime.Parse(startDatetime);
+            newDT.EndTime = DateTime.Parse(endDatetime);
+            newDT.Area = area;
+            newDT.AffectedArea = affectedArea;
+            newDT.Reason = reason;
+            newDT.EquipmentTag = equipmentTag;
+            newDT.ResponsiblePerson = responsiblePerson;
+            newDT.Notes = notes;
+            newDT.ShiftTypeID = shiftType;
+
+            if (addOneDay)
+            {
+                newDT.EndTime = newDT.EndTime.AddDays(1);
+            }
+            db.SaveChanges();
+            return newDT.DownTimeID;
+        }
+        // [HttpGet]
+        public JsonResult getDownTimeByID(int DownTimeID)
+        {
+            DOWNTIME newDT = db.DOWNTIMEs.Where(item => item.DownTimeID == DownTimeID).SingleOrDefault();
+            var obj = new
+            {
+                DownTimeID = newDT.DownTimeID,
+                Date = newDT.Date.ToString("yyyy-MM-dd"),
+                StartTime = newDT.StartTime.ToShortTimeString(),
+                EndTime = newDT.EndTime.ToShortTimeString(),
+                Area = newDT.Area,
+                AffectedArea = newDT.AffectedArea,
+                Reason = newDT.Reason.Trim(),
+                EquipmentTag = newDT.EquipmentTag.Trim(),
+                ResponsiblePerson = newDT.ResponsiblePerson.Trim(),
+                Notes = newDT.Notes.Trim(),
+                ShiftTypeID = newDT.ShiftTypeID
+            };
+
+            return this.Json(obj);
+            //return this.Json(db.DOWNTIMEs.Where(item => item.DownTimeID == DownTimeID).Select(n => new
+            //{
+            //    DownTimeID = n.DownTimeID,
+            //    Date = n.Date.ToString(),
+            //    StartTime = n.StartTime,
+            //    EndTime = n.EndTime,
+            //    Area = n.Area,
+            //    AffectedArea = n.AffectedArea,
+            //    Reason = n.Reason,
+            //    EquipmentTag = n.EquipmentTag,
+            //    ResponsiblePerson = n.ResponsiblePerson,
+            //    Notes = n.Notes,
+            //    ShiftTypeID = n.ShiftTypeID
+            //}).ToList()
+            //     .Select(x => new
+            //     {
+            //         DownTimeID = x.DownTimeID,
+            //         Date = x.Date.ToString(),
+            //         StartTime = x.StartTime,
+            //         EndTime = x.EndTime,
+            //         Area = x.Area,
+            //         AffectedArea = x.AffectedArea,
+            //         Reason = x.Reason,
+            //         EquipmentTag = x.EquipmentTag,
+            //         ResponsiblePerson = x.ResponsiblePerson,
+            //         Notes = x.Notes,
+            //         ShiftTypeID = x.ShiftTypeID
+            //     }));
+        }
     }
 }

@@ -8,7 +8,9 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#TblDownTime').dataTable();
+        $('#TblDownTime').dataTable({
+            "order": [0, 'desc']
+        });
     });
 </script>
 <br />
@@ -31,12 +33,13 @@
         @foreach (var item in Model)
         {
             string date = item.Date.ToString("yyyy-MM-dd");
-            string start = item.StartTime.ToString("HH:MM");
-            string End = item.EndTime.ToString("HH:MM");
+            string start = item.StartTime.ToString("HH:mm");
+            string End = item.EndTime.ToString("HH:mm");
+            string DowntimeID = item.DownTimeID.ToString();
             
             <tr>
               @* getProcessByProcessID(@Html.DisplayFor(modelItem => item.DownTimeID));*@
-                <td> @date<span onclick="" class="glyphicon glyphicon-pencil" style="color:limegreen; padding-left:20px; cursor: pointer;" title="Edit"></span></td>
+                <td> @date<span onclick="getDowntimeByID(@DowntimeID)" class="glyphicon glyphicon-pencil" style="color:limegreen; padding-left:20px; cursor: pointer;" title="Edit" ></span></td>
                 <td> @start</td>
                 <td> @End</td>
                 <td> @Html.DisplayFor(modelItem => item.Area)</td>
