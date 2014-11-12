@@ -4,15 +4,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
+using Microsoft.AspNet.Identity;
 
 namespace GrabIt.Controllers
 {
+    [Authorize]
     public class DownTimeController : Controller
     {
         private GrabItEntities db = new GrabItEntities();
         // GET: DownTime
         public ActionResult Index()
         {
+            string userGuid = User.Identity.GetUserId();
+
+            USER usr = db.USERS.Where(item => item.UserNetID == userGuid).SingleOrDefault();
+            if (usr == null)
+            {
+
+            }
+            else
+            {
+                HttpContext.Session["UserName"] = usr.UserName.Trim();
+            }
 
             List<GrabIt.Models.DOWNTIMEVIEW> Model = db.DOWNTIMEVIEWs.OrderByDescending(item => item.Date).Take(100).ToList();
             return View(Model);

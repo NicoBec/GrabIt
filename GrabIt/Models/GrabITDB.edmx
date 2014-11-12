@@ -193,6 +193,7 @@
           <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserName" Type="nchar" MaxLength="50" Nullable="false" />
           <Property Name="Password" Type="nchar" MaxLength="100" />
+          <Property Name="UserNetID" Type="nvarchar" MaxLength="128" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'GrabIt.dbo.DOWNTIMEVIEW' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -827,6 +828,7 @@ warning 6002: The table/view 'GrabIt.dbo.ProcessesView' does not have a primary 
           <Property Name="UserName" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
           <Property Name="Password" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
           <NavigationProperty Name="PROCESSES" Relationship="Self.FK_PROCESSES_USERS" FromRole="USERS" ToRole="PROCESSES" />
+          <Property Name="UserNetID" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
@@ -1450,6 +1452,7 @@ warning 6002: The table/view 'GrabIt.dbo.ProcessesView' does not have a primary 
           <EntitySetMapping Name="USERS">
             <EntityTypeMapping TypeName="GrabItModel.USER">
               <MappingFragment StoreEntitySet="USERS">
+                <ScalarProperty Name="UserNetID" ColumnName="UserNetID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="Password" ColumnName="Password" />

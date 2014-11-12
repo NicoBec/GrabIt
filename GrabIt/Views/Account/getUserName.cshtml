@@ -1,0 +1,40 @@
+﻿
+<script type="text/javascript">
+   
+    $(document).ready(function () { });
+
+    function saveUserName() {
+
+        var name = $("#txtUserName").val();
+
+        $.ajax({
+            url: '@(Url.Action("AddUserName", "Account"))',
+            data: { UserName: name },
+            type: "POST",
+            success: function (data) {
+               
+                
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(thrownError);
+            }
+        });
+
+    };
+
+</script>
+
+<div id="divUserName" class="form-group col-md-6" style="margin-left: -45px;">
+    <div class="col-xs-12">
+        <label class="col-xs-8 control-label" for="UserName">End Time:</label>
+        <div class="col-xs-10">
+            <input id="txtUserName" type="time" class="form-control">
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="form-group">
+        <input id="BtnAddProcess" type="button" class="btn btn-default" style="margin-left: 15px;margin-top: 20px;" value="Add" onclick="saveUserName();" />
+        <div class="horizontalRule"></div>
+    </div>
+</div>
