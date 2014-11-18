@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace GrabIt.Controllers
 {
+    [Authorize]
     public class DataInputController : Controller
     {
         // GET: DataInput

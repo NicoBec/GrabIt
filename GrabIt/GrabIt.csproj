@@ -505,6 +505,7 @@
     <Content Include="Views\DataInput\GetMeasurements.cshtml" />
     <Content Include="Views\DownTime\Index.cshtml" />
     <Content Include="Views\DownTime\DownTimeAdd.cshtml" />
+    <Content Include="Views\Account\getUserName.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

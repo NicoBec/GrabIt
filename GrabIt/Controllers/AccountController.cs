@@ -16,7 +16,7 @@ namespace GrabIt.Controllers
     public class AccountController : Controller
     {
         private ApplicationUserManager _userManager;
-
+        private GrabItEntities db = new GrabItEntities();
         public AccountController()
         {
         }
@@ -418,6 +418,30 @@ namespace GrabIt.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        public ActionResult getUserName()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public bool AddUserName(string UserName)
+        {
+            string userGuid = User.Identity.GetUserId();
+            if (userGuid == "")
+            {
+                return false;
+            }
+
+
+            USER usr = new USER();
+            usr.UserName = UserName;
+            usr.UserNetID = userGuid;
+            db.USERS.Add(usr);
+
+            db.SaveChanges();
+            return true;
+        }
         #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
