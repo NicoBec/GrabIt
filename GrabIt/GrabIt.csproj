@@ -401,6 +401,7 @@
       <LastGenOutput>GrabITDB.cs</LastGenOutput>
     </Content>
     <Content Include="images\Sorting icons.psd" />
+    <None Include="Properties\PublishProfiles\Live.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
