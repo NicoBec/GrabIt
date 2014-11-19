@@ -455,6 +455,7 @@
     <Content Include="SQLScripts\Drop Create 1.sql" />
     <Content Include="SQLScripts\Drop Create 2.sql" />
     <Content Include="SQLScripts\Drop Create 3.sql" />
+    <Content Include="SQLScripts\Drop Create 4.sql" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
@@ -506,6 +507,7 @@
     <Content Include="Views\DownTime\Index.cshtml" />
     <Content Include="Views\DownTime\DownTimeAdd.cshtml" />
     <Content Include="Views\Account\getUserName.cshtml" />
+    <Content Include="Views\Account\GetFullName.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

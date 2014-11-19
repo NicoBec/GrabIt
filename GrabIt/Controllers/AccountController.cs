@@ -88,6 +88,8 @@ namespace GrabIt.Controllers
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
+
+
                 case SignInStatus.Success:
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
@@ -399,7 +401,31 @@ namespace GrabIt.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View(model);
         }
+        [HttpGet]
+        public ActionResult GetFullName()
+        {
 
+            return View();
+        }
+        [HttpPost]
+        public ActionResult GetFullName(GrabIt.Models.USER model)
+        {
+            model.UserNetID = User.Identity.GetUserId();
+            USER usr = db.USERS.Where(item => item.UserNetID == model.UserNetID).SingleOrDefault();
+            if (usr == null)
+            {
+                db.USERS.Add(model);
+            }
+            else
+            {
+                usr.UserName = model.UserName;
+            }
+                
+         
+            db.SaveChanges();
+
+            return RedirectToAction("Index", "Home");
+        }
         //
         // POST: /Account/LogOff
         [HttpPost]

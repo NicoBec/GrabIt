@@ -25,5 +25,6 @@ namespace GrabIt.Models
         public string ResponsiblePerson { get; set; }
         public string Notes { get; set; }
         public string ShiftType { get; set; }
+        public string UserName { get; set; }
     }
 }

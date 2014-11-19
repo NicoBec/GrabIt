@@ -21,11 +21,19 @@ namespace GrabIt.Controllers
             USER usr = db.USERS.Where(item => item.UserNetID == userGuid).SingleOrDefault();
             if (usr == null)
             {
-
+                return RedirectToAction("GetFullName", "Account");
             }
             else
             {
+
+                if (usr.Enabled == null || usr.Enabled == 0)
+                {
+                    return RedirectToAction("Index", "Home");
+
+                }
+
                 HttpContext.Session["UserName"] = usr.UserName.Trim();
+                HttpContext.Session["UserID"] = usr.UserID;
             }
 
             List<GrabIt.Models.DOWNTIMEVIEW> Model = db.DOWNTIMEVIEWs.OrderByDescending(item => item.Date).Take(100).ToList();
@@ -75,6 +83,7 @@ namespace GrabIt.Controllers
             newDT.ResponsiblePerson = responsiblePerson;
             newDT.Notes = notes;
             newDT.ShiftTypeID = shiftType;
+            newDT.UserID = (int)HttpContext.Session["UserID"];
 
             if (addOneDay)
             {

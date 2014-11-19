@@ -23,6 +23,7 @@ namespace GrabIt.Models
         public string UserName { get; set; }
         public string Password { get; set; }
         public string UserNetID { get; set; }
+        public Nullable<int> Enabled { get; set; }
     
         public virtual ICollection<PROCESS> PROCESSES { get; set; }
     }

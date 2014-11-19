@@ -89,6 +89,7 @@
           <Property Name="ResponsiblePerson" Type="nchar" MaxLength="100" />
           <Property Name="Notes" Type="nvarchar(max)" />
           <Property Name="ShiftTypeID" Type="int" />
+          <Property Name="UserID" Type="int" />
         </EntityType>
         <EntityType Name="GLOBALLOOKUP">
           <Key>
@@ -194,6 +195,7 @@
           <Property Name="UserName" Type="nchar" MaxLength="50" Nullable="false" />
           <Property Name="Password" Type="nchar" MaxLength="100" />
           <Property Name="UserNetID" Type="nvarchar" MaxLength="128" />
+          <Property Name="Enabled" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'GrabIt.dbo.DOWNTIMEVIEW' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -206,6 +208,7 @@ warning 6002: The table/view 'GrabIt.dbo.DOWNTIMEVIEW' does not have a primary k
             <PropertyRef Name="Area" />
             <PropertyRef Name="AffectedArea" />
             <PropertyRef Name="EquipmentTag" />
+            <PropertyRef Name="UserName" />
           </Key>
           <Property Name="DownTimeID" Type="int" Nullable="false" />
           <Property Name="Date" Type="date" Nullable="false" />
@@ -218,6 +221,7 @@ warning 6002: The table/view 'GrabIt.dbo.DOWNTIMEVIEW' does not have a primary k
           <Property Name="ResponsiblePerson" Type="nchar" MaxLength="100" />
           <Property Name="Notes" Type="nvarchar(max)" />
           <Property Name="ShiftType" Type="nchar" MaxLength="50" />
+          <Property Name="UserName" Type="nchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'GrabIt.dbo.MEASUREMENTVIEW' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -562,7 +566,8 @@ warning 6002: The table/view 'GrabIt.dbo.ProcessesView' does not have a primary 
     [DOWNTIMEVIEW].[EquipmentTag] AS [EquipmentTag], 
     [DOWNTIMEVIEW].[ResponsiblePerson] AS [ResponsiblePerson], 
     [DOWNTIMEVIEW].[Notes] AS [Notes], 
-    [DOWNTIMEVIEW].[ShiftType] AS [ShiftType]
+    [DOWNTIMEVIEW].[ShiftType] AS [ShiftType], 
+    [DOWNTIMEVIEW].[UserName] AS [UserName]
     FROM [dbo].[DOWNTIMEVIEW] AS [DOWNTIMEVIEW]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="MEASUREMENTVIEW" EntityType="Self.MEASUREMENTVIEW" store:Type="Views" store:Schema="dbo">
@@ -829,6 +834,7 @@ warning 6002: The table/view 'GrabIt.dbo.ProcessesView' does not have a primary 
           <Property Name="Password" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
           <NavigationProperty Name="PROCESSES" Relationship="Self.FK_PROCESSES_USERS" FromRole="USERS" ToRole="PROCESSES" />
           <Property Name="UserNetID" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Enabled" Type="Int32" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
@@ -1211,6 +1217,7 @@ warning 6002: The table/view 'GrabIt.dbo.ProcessesView' does not have a primary 
           <Property Name="ShiftTypeID" Type="Int32" />
           <NavigationProperty Name="GLOBALLOOKUP" Relationship="GrabItModel.FK_DOWNTIME_GLOBALLOOKUP2" FromRole="DOWNTIME" ToRole="GLOBALLOOKUP" />
           <NavigationProperty Name="GLOBALLOOKUP1" Relationship="GrabItModel.FK_DOWNTIME_GLOBALLOOKUP3" FromRole="DOWNTIME" ToRole="GLOBALLOOKUP" />
+          <Property Name="UserID" Type="Int32" />
         </EntityType>
         <EntityType Name="GLOBALLOOKUP">
           <Key>
@@ -1250,6 +1257,7 @@ warning 6002: The table/view 'GrabIt.dbo.ProcessesView' does not have a primary 
             <PropertyRef Name="Area" />
             <PropertyRef Name="AffectedArea" />
             <PropertyRef Name="EquipmentTag" />
+            <PropertyRef Name="UserName" />
           </Key>
           <Property Name="DownTimeID" Type="Int32" Nullable="false" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
@@ -1262,6 +1270,7 @@ warning 6002: The table/view 'GrabIt.dbo.ProcessesView' does not have a primary 
           <Property Name="ResponsiblePerson" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
           <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ShiftType" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="true" />
         </EntityType>
         <Association Name="FK_DOWNTIME_GLOBALLOOKUP2">
           <End Type="GrabItModel.GLOBALLOOKUP" Role="GLOBALLOOKUP" Multiplicity="1" />
@@ -1452,6 +1461,7 @@ warning 6002: The table/view 'GrabIt.dbo.ProcessesView' does not have a primary 
           <EntitySetMapping Name="USERS">
             <EntityTypeMapping TypeName="GrabItModel.USER">
               <MappingFragment StoreEntitySet="USERS">
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
                 <ScalarProperty Name="UserNetID" ColumnName="UserNetID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
@@ -1506,6 +1516,7 @@ warning 6002: The table/view 'GrabIt.dbo.ProcessesView' does not have a primary 
           <EntitySetMapping Name="DOWNTIMEs">
             <EntityTypeMapping TypeName="GrabItModel.DOWNTIME">
               <MappingFragment StoreEntitySet="DOWNTIME">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="ShiftTypeID" ColumnName="ShiftTypeID" />
                 <ScalarProperty Name="Notes" ColumnName="Notes" />
                 <ScalarProperty Name="ResponsiblePerson" ColumnName="ResponsiblePerson" />
@@ -1551,6 +1562,7 @@ warning 6002: The table/view 'GrabIt.dbo.ProcessesView' does not have a primary 
           <EntitySetMapping Name="DOWNTIMEVIEWs">
             <EntityTypeMapping TypeName="GrabItModel.DOWNTIMEVIEW">
               <MappingFragment StoreEntitySet="DOWNTIMEVIEW">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="ShiftType" ColumnName="ShiftType" />
                 <ScalarProperty Name="Notes" ColumnName="Notes" />
                 <ScalarProperty Name="ResponsiblePerson" ColumnName="ResponsiblePerson" />

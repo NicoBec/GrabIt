@@ -25,6 +25,7 @@ namespace GrabIt.Models
         public string ResponsiblePerson { get; set; }
         public string Notes { get; set; }
         public Nullable<int> ShiftTypeID { get; set; }
+        public Nullable<int> UserID { get; set; }
     
         public virtual GLOBALLOOKUP GLOBALLOOKUP { get; set; }
         public virtual GLOBALLOOKUP GLOBALLOOKUP1 { get; set; }

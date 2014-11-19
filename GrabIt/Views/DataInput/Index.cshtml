@@ -17,7 +17,7 @@
         $("#datepicker").val(prettyDate);
 
         $("#BtnAddShift").click(function () {
-            $("#ProcessBlock").slideUp('slow');
+            $("#ProcessBlockContainer").slideUp('slow');
 
             selectedProcess = null
             $("#SelShiftType").attr("disabled", false);
@@ -27,7 +27,8 @@
                 url: '@(Url.Action("ProcessAddView", "DataInput"))',
                 data: {},
                 success: function (data) {
-                    $("#ProcessBlock").html(data).slideDown('slow');
+                    $("#ProcessBlock").html(data)
+                    $("#ProcessBlockContainer").slideDown('slow');
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     console.log(thrownError);
@@ -54,6 +55,7 @@
     }
     function getMeasurements(ProcessID, ProcessTypeID) {
         var done = $.Deferred();
+       
         console.log("getMeasurements(" + ProcessID + ")");
         $.ajax({
             url: '@(Url.Action("GetMeasurements", "DataInput"))',
@@ -78,6 +80,7 @@
             contentType: 'application/json',
             // dataType: 'json',
             success: function (data) {
+                MeasurementsList = [];
                 $.each(data, function (index, item) {
                     item.Desc = $.trim(item.Desc);
                     MeasurementsList.push(item);
@@ -110,38 +113,56 @@
             }
         });
     }
+    var deflist;
     function saveMeasurements() {
         if (currentProcessID == 0) {
             return false;
         }
         var allDone = true;
+        MeasurementCount = 0;
+        deflist = [];
+
         $.each(MeasurementsList, function (index, item) {
             var val = $("#" + item.MeasurementTypeID).val();
-            console.log($.trim(item.Desc) + ": " + val)
+            // console.log($.trim(item.Desc) + ": " + val)
+            MeasurementCount++;
+            deflist.push(new $.Deferred());
             if (val != "") {
-                MeasurementCount++;
+               
                 var obj = {
                     ProcessID: currentProcessID,
                     MeasurementTypeID: item.MeasurementTypeID,
                     Value: val
                 }
-                saveMeasurement(obj);
+            
+                   
+                
+                console.log("Start: " + MeasurementCount)
+                saveMeasurement(obj, MeasurementCount-1);
             } else {
+                deflist[MeasurementCount - 1].resolve(true);
                 allDone = false;
             }
         });
-        $("#ProcessBlock").hide("slow");
-        $("#MeasurementsBlock").hide("slow");
-        dateChanged();
-        $("#BtnAddShift").attr("disabled", false);
+        console.log("When")
+        $.when.apply($, deflist).done(function () {
+            console.log("When done")
+            $("#ProcessBlockContainer").hide("slow");
+            $("#MeasurementsBlock").hide("slow");
+            dateChanged();
+            $("#BtnAddShift").attr("disabled", false);
+          
+        });
+      
 
     }
-    function saveMeasurement(MeasurmentObject) {
-        console.log(MeasurmentObject);
+    function saveMeasurement(MeasurmentObject, indx) {
         $.ajax({
             url: '@(Url.Action("AddMeasurement", "DataInput"))',
             data: MeasurmentObject,
             success: function (data) {
+                console.log("End: " + indx);
+                deflist[indx].resolve(true);
             },
             error: function (xhr, ajaxOptions, thrownError) {
 
@@ -159,7 +180,7 @@
                 if (data) {
                     selectedProcess = data;
                     $("#BtnAddShift").attr("disabled", true);
-                    $("#ProcessBlock").slideUp();
+                    $("#ProcessBlockContainer").slideUp();
                     $.ajax({
                         url: '@(Url.Action("ProcessAddView", "DataInput"))',
                         data: {},
@@ -175,7 +196,7 @@
                             $("#SelShiftType").attr("disabled", true);
                             $("#SelCatType").attr("disabled", true);
                           
-                            $("#ProcessBlock").slideDown("slow");
+                            $("#ProcessBlockContainer").slideDown("slow");
                             $.when(
                              getMeasurements(ProcessID, selectedProcess.ProcessTypeID),
                              getMeasurementsList(selectedProcess.ProcessTypeID)).done(function () {
@@ -217,11 +238,13 @@
     <input id="BtnAddShift" type="button" class="btn btn-default" value="Add Shift" />
     <div class="horizontalRule"></div>
 </div>
-<div id="ProcessBlock"></div>
-<div id="MeasurementsBlock"></div>
-<div class="horizontalRule"></div>
-<div id="divBtnSave" style="display: none;">
-    <input id="BtnSaveMeasurements" type="button" class="btn btn-default" value="Save" onclick="saveMeasurements();" />
+<div id="ProcessBlockContainer">
+    <div id="ProcessBlock"></div>
+    <div id="MeasurementsBlock"></div>
+  
+    <div id="divBtnSave" style="display: none;">
+        <input id="BtnSaveMeasurements" type="button" class="btn btn-default" value="Save" onclick="saveMeasurements();" />
+    </div>
 </div>
 
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 
 namespace GrabIt.Controllers
 {
@@ -14,6 +15,25 @@ namespace GrabIt.Controllers
         private GrabItEntities db = new GrabItEntities();
         public ActionResult Index()
         {
+            string userGuid = User.Identity.GetUserId();
+            USER usr = db.USERS.Where(item => item.UserNetID == userGuid).SingleOrDefault();
+            if (usr == null)
+            {
+                return RedirectToAction("GetFullName", "Account");
+            }
+            else
+            {
+
+                if (usr.Enabled == null || usr.Enabled == 0)
+                {
+                    return RedirectToAction("Index", "Home");
+
+                }
+
+                HttpContext.Session["UserName"] = usr.UserName.Trim();
+                HttpContext.Session["UserID"] = usr.UserID;
+            }
+
             return View();
         }
         public JsonResult GetProcessByProcessID(int ProcessID)
@@ -135,10 +155,11 @@ namespace GrabIt.Controllers
                 current.StartTime = prs.StartTime;
                 current.EndTime = prs.EndTime;
                 current.ProcessTypeID = prs.ProcessTypeID;
-                current.UserID = prs.UserID;
+                current.UserID = (int)HttpContext.Session["UserID"];
                 current.Completed = prs.Completed;
                
             }else{
+                prs.UserID = (int)HttpContext.Session["UserID"];
                 db.PROCESSES.Add(prs);
             }
 
