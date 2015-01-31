@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewBag.Title = "Add More Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Add More Users</h2>
+
+<div id="newUser">
+    @Html.Partial("CreateUser", new GrabIt.Models.RegisterViewModel())
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

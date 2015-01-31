@@ -1,0 +1,120 @@
+﻿@model GrabIt.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+}
+
+<script>
+    function DoAjaxPostAndMore(btnClicked) {
+        var $form = $(btnClicked).parents('form');
+
+        $.ajax({
+            type: "POST",
+            url: $form.attr('action'),
+            data: $form.serialize(),
+            error: function (xhr, status, error) {
+                //do something about the error
+            },
+            success: function (response) {
+                //do something with response
+                $("#newUser").html(response);
+
+            }
+        });
+
+        return false;// if it's a link to prevent post
+
+    }
+</script>
+@if (Model == null)
+{
+
+}
+
+<script>
+    $(function () {
+        var t = '@ViewBag.UserType';
+        if (t !== "") {
+            $("#UserType").val(t);
+        }
+    })
+</script>
+
+
+
+@using (Ajax.BeginForm("CreateUser", "Account",
+            new AjaxOptions
+            {
+                HttpMethod = "POST",
+                UpdateTargetId = "newUser"
+            }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Create a new account.</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <fieldset>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+                @Html.LabelFor(m => m.UsersName, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.UsersName, new { @class = "form-control" })
+                </div>
+            </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.UserType, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                <select class="form-control" id="UserType" name="UserType" required="required">
+                    <option value=""></option>
+                    @foreach (var item in @ViewBag.UsrType)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+
+                @if (ViewBag.Added != null && ViewBag.Added)
+                {
+                    <h4 style="color:green;">@ViewBag.Done</h4>
+                }
+                else
+                {
+                    <h4 style="color:red;">@ViewBag.Done</h4>
+                }
+
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input class="btn btn-default" value="Register" onclick="DoAjaxPostAndMore(this)" />
+            </div>
+        </div>
+    </fieldset>
+
+}
+
+
+
+
+

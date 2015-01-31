@@ -139,10 +139,7 @@ namespace GrabIt.Controllers
             {
                 return 0;
             }
-
-
-           
-            return prs.ProcessID;
+       
         }
         public int AddProcess(PROCESS prs)
         {

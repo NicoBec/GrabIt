@@ -38,6 +38,75 @@ namespace GrabIt.Controllers
                 _userManager = value;
             }
         }
+        [AllowAnonymous]
+        public ActionResult AddMoreUser(string returnUrl)
+        {
+           
+            return View();
+        }
+
+
+        [AllowAnonymous]
+        public ActionResult CreateUser(string returnUrl)
+        {
+            ViewBag.Done = "";
+            ViewBag.Added = false;
+
+            ViewBag.UsrType = db.AspNetRoles.ToList();
+
+            ViewBag.UserType = "";
+            return PartialView("CreateUser");
+        }
+
+        // POST: /Account/Register
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        [AcceptVerbs(HttpVerbs.Post)]
+        public async Task<ActionResult> CreateUser(RegisterViewModel model)
+        {
+            ViewBag.Done = "";
+            ViewBag.Added = false;
+            ViewBag.UsrType = db.AspNetRoles.ToList();
+            ViewBag.UserType = model.UserType;
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+
+                USER tempUsr = new USER();
+                tempUsr.UserName = model.UsersName;
+                tempUsr.UserNetID = user.Id;
+                tempUsr.Enabled = model.UserType;
+                db.USERS.Add(tempUsr);
+                db.SaveChanges();
+
+                var result = await UserManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    // await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                    // Send an email with this link
+                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    ViewBag.Done = "The User has Been added.";
+                    ViewBag.Added = true;
+                    model = new RegisterViewModel();
+                    return PartialView("CreateUser");
+                    //return RedirectToAction("Index", "Home");
+                }
+                AddErrors(result);
+            }
+            else
+            {
+                ViewBag.Done = "User Not Added!";
+            }
+
+            // If we got this far, something failed, redisplay form
+             return PartialView("CreateUser", model);
+        }
+
 
         // The Authorize Action is the end point which gets called when you access any
         // protected Web API. If the user is not logged in then they will be redirected to 
@@ -168,7 +237,16 @@ namespace GrabIt.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Hometown = model.Hometown };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+
+                USER tempUsr = new USER();
+                tempUsr.UserName = model.UsersName;
+                tempUsr.UserNetID = user.Id;
+
+                db.USERS.Add(tempUsr);
+                db.SaveChanges();
+
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -384,7 +462,7 @@ namespace GrabIt.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Hometown = model.Hometown };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -420,8 +498,8 @@ namespace GrabIt.Controllers
             {
                 usr.UserName = model.UserName;
             }
-                
-         
+
+
             db.SaveChanges();
 
             return RedirectToAction("Index", "Home");

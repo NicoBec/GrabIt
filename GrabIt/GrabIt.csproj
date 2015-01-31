@@ -206,6 +206,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\DataInputController.cs" />
     <Compile Include="Controllers\DownTimeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -362,6 +363,9 @@
     <Content Include="images\sort_desc_disabled.png" />
     <Content Include="Scripts\bootstrap-dialog.js" />
     <Content Include="Scripts\bootstrap-timepicker.js" />
+    <Content Include="Scripts\bootstrap-timepicker.min.js">
+      <DependentUpon>bootstrap-timepicker.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
@@ -406,6 +410,12 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Content Include="Scripts\bootstrap.min.js.map">
+      <DependentUpon>bootstrap.min.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\bootstrap-timepicker.min.js.map">
+      <DependentUpon>bootstrap-timepicker.min.js</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrapValidator.js" />
     <Content Include="Scripts\dataTables.bootstrap.js" />
@@ -508,6 +518,22 @@
     <Content Include="Views\DownTime\DownTimeAdd.cshtml" />
     <Content Include="Views\Account\getUserName.cshtml" />
     <Content Include="Views\Account\GetFullName.cshtml" />
+    <Content Include="Scripts\respond.min.js.map">
+      <DependentUpon>respond.min.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\sammy-0.7.4.min.js.map">
+      <DependentUpon>sammy-0.7.4.min.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery-1.10.2.min.js.map">
+      <DependentUpon>jquery-1.10.2.min.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery-ui-1.11.2.custom\jquery-ui.min.js.map">
+      <DependentUpon>jquery-ui.min.js</DependentUpon>
+    </Content>
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Shared\CreateUser.cshtml" />
+    <Content Include="Views\Account\AddMoreUser.cshtml" />
+    <Content Include="Views\Admin\UserList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

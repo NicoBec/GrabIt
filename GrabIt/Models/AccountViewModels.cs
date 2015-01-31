@@ -11,8 +11,8 @@ namespace GrabIt.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Display(Name = "Hometown")]
-        public string Hometown { get; set; }
+        [Display(Name = "UsersName")]
+        public string UsersName { get; set; }
     }
 
     public class ExternalLoginListViewModel
@@ -85,8 +85,15 @@ namespace GrabIt.Models
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        [Display(Name = "Hometown")]
-        public string Hometown { get; set; }
+        [Required]
+        [Display(Name = "Users Name")]
+        public string UsersName { get; set; }
+
+        [Required]
+        [Display(Name = "User Type")]
+        public int UserType { get; set; }
+        
+
     }
 
     public class ResetPasswordViewModel
