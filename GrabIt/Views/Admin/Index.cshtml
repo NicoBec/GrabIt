@@ -6,17 +6,25 @@
 
 <h2>Admin</h2>
 
+<h4>Create a new account.</h4>
+<button type="button" class="btn btn-default btn-sm" onclick="$('#newUser').toggle('slow');">
+    <span class="glyphicon glyphicon-plus"></span> Add User
+</button>
+    <div class="horizontalRule"></div>
+ 
+<div id="newUser" style="display: none;">
+    @*@Html.Partial("CreateUser", new GrabIt.Models.RegisterViewModel())*@
+
+    @Html.Action("CreateUser", "Account")
+</div>
+
 <div>
    
     @Html.Action("UserList", "Admin")
 </div>
 
 
-<div id="newUser">
-    @*@Html.Partial("CreateUser", new GrabIt.Models.RegisterViewModel())*@
 
-@Html.Action("CreateUser", "Account");
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

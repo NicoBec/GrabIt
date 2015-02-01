@@ -46,7 +46,6 @@
                         message: 'The Shift has been captured, do you want to edit it?',
                         buttons: [{
                             label: 'Cancel',
-                            //cssClass: 'btn-primary',
                             action: function (dialogRef) {
                                 dateChanged();
                                 $("#ProcessBlock").hide("slow");
@@ -166,10 +165,6 @@
                     <div id="DivProcessType"></div>
                 </div>
             </div>
-
-            @*@{Html.RenderAction("GetProcessType", "DataInput");}<br />*@
-
-
         </div>
         <div class="row">
             <div class="form-group">

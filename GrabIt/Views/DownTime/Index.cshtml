@@ -37,10 +37,9 @@
             string start = item.StartTime.ToString("HH:mm");
             string End = item.EndTime.ToString("HH:mm");
             string DowntimeID = item.DownTimeID.ToString();
-            
+
             <tr>
-              @* getProcessByProcessID(@Html.DisplayFor(modelItem => item.DownTimeID));*@
-                <td> @date<span onclick="getDowntimeByID(@DowntimeID)" class="glyphicon glyphicon-pencil" style="color:limegreen; padding-left:20px; cursor: pointer;" title="Edit" ></span></td>
+                <td> @date<span onclick="getDowntimeByID(@DowntimeID)" class="glyphicon glyphicon-pencil" style="color:limegreen; padding-left:20px; cursor: pointer;" title="Edit"></span></td>
                 <td> @start</td>
                 <td> @End</td>
                 <td> @Html.DisplayFor(modelItem => item.Area)</td>
@@ -50,12 +49,10 @@
                 <td> @Html.DisplayFor(modelItem => item.ResponsiblePerson)</td>
                 <td> @Html.DisplayFor(modelItem => item.Notes)</td>
                 <td> @Html.DisplayFor(modelItem => item.UserName)</td>
-            
+
             </tr>
         }
     </tbody>
 </table>
-
 <div class="horizontalRule"></div>
-
- @{Html.RenderAction("DownTimeAdd", "DownTime");}
+@{Html.RenderAction("DownTimeAdd", "DownTime");}

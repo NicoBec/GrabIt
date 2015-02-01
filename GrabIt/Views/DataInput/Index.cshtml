@@ -22,7 +22,6 @@
             selectedProcess = null
             $("#SelShiftType").attr("disabled", false);
             $("#SelProcessType").attr("disabled", false);
-           // $("#SelCatType").attr("disabled", false);
             $.ajax({
                 url: '@(Url.Action("ProcessAddView", "DataInput"))',
                 data: {},
@@ -78,7 +77,6 @@
             url: '@(Url.Action("GetMeasurementsList", "DataInput"))',
             data: { ProcessTypeID: ProcessTypeID },
             contentType: 'application/json',
-            // dataType: 'json',
             success: function (data) {
                 MeasurementsList = [];
                 $.each(data, function (index, item) {
@@ -101,7 +99,6 @@
             url: '@(Url.Action("GetMeasurementsByProcessID", "DataInput"))',
             data: { ProcessID: ProcessID },
             contentType: 'application/json',
-            // dataType: 'json',
             success: function (data) {
                 $.each(data, function (index, item) {
                     $("#" + item.ID).val($.trim(item.Value));
@@ -124,7 +121,6 @@
 
         $.each(MeasurementsList, function (index, item) {
             var val = $("#" + item.MeasurementTypeID).val();
-            // console.log($.trim(item.Desc) + ": " + val)
             MeasurementCount++;
             deflist.push(new $.Deferred());
             if (val != "") {
@@ -134,8 +130,6 @@
                     MeasurementTypeID: item.MeasurementTypeID,
                     Value: val
                 }
-            
-                   
                 
                 console.log("Start: " + MeasurementCount)
                 saveMeasurement(obj, MeasurementCount-1);
@@ -153,9 +147,8 @@
             $("#BtnAddShift").attr("disabled", false);
           
         });
-      
-
     }
+
     function saveMeasurement(MeasurmentObject, indx) {
         $.ajax({
             url: '@(Url.Action("AddMeasurement", "DataInput"))',
@@ -169,13 +162,13 @@
             }
         });
     }
+
     function getProcessByProcessID(ProcessID) {
         currentProcessID = ProcessID;
         $.ajax({
             url: '@(Url.Action("GetProcessByProcessID", "DataInput"))',
             data: { ProcessID: ProcessID },
             contentType: 'application/json',
-            // dataType: 'json',
             success: function (data) {
                 if (data) {
                     selectedProcess = data;
@@ -246,6 +239,3 @@
         <input id="BtnSaveMeasurements" type="button" class="btn btn-default" value="Save" onclick="saveMeasurements();" />
     </div>
 </div>
-
-
-@*@{Html.RenderAction("GetMeasurements", "DataInput");}*@

@@ -15,6 +15,7 @@ namespace GrabIt.Controllers
         private GrabItEntities db = new GrabItEntities();
         public ActionResult Index()
         {
+            //Here we check if the user has a unser name and also has been Enabled to View this Page
             string userGuid = User.Identity.GetUserId();
             USER usr = db.USERS.Where(item => item.UserNetID == userGuid).SingleOrDefault();
             if (usr == null)
@@ -36,6 +37,7 @@ namespace GrabIt.Controllers
 
             return View();
         }
+        //Return a singe process by ProcessID
         public JsonResult GetProcessByProcessID(int ProcessID)
         {
 
@@ -58,12 +60,12 @@ namespace GrabIt.Controllers
             return Json(items, JsonRequestBehavior.AllowGet);
 
         }
+
         public PartialViewResult ProcessAddView()
         {
-            // var model = db.GetProcessesByDate("");
-
             return PartialView("ProcessAddView");
         }
+
         public PartialViewResult ProcessAddedlist(string date = "")
         {
             DateTime theDate;
@@ -81,21 +83,25 @@ namespace GrabIt.Controllers
 
             return PartialView(model);
         }
+
         public PartialViewResult GetShiftType()
         {
             var model = db.SHIFTTYPES.ToList();
             return PartialView(model);
         }
+
         public PartialViewResult GetProcessType(int catID)
         {
             var model = db.PROCESSTYPES.Where(Item => Item.ProcessCategoryID == catID).ToList();
             return PartialView(model);
         }
+
         public PartialViewResult GetProcessCat()
         {
             var model = db.PROCESSCATEGORIES.ToList();
             return PartialView(model);
         }
+
         //measurements
         public PartialViewResult GetMeasurements(int ProcessTypeID)
         {
@@ -120,6 +126,7 @@ namespace GrabIt.Controllers
             return Json(items, JsonRequestBehavior.AllowGet);
 
         }
+
         public JsonResult GetMeasurementsByProcessID(int ProcessID)
         {
 
@@ -127,6 +134,7 @@ namespace GrabIt.Controllers
             return Json(items, JsonRequestBehavior.AllowGet);
 
         }
+
         public int checkProcessExist(PROCESS prs)
         {
 
@@ -134,12 +142,10 @@ namespace GrabIt.Controllers
             if (current != null)
             {
                 return current.ProcessID;
-            }
-            else
-            {
+            }else{
                 return 0;
             }
-       
+
         }
         public int AddProcess(PROCESS prs)
         {
@@ -155,7 +161,9 @@ namespace GrabIt.Controllers
                 current.UserID = (int)HttpContext.Session["UserID"];
                 current.Completed = prs.Completed;
                
-            }else{
+            }
+            else
+            {
                 prs.UserID = (int)HttpContext.Session["UserID"];
                 db.PROCESSES.Add(prs);
             }
@@ -164,6 +172,7 @@ namespace GrabIt.Controllers
             db.SaveChanges();
             return prs.ProcessID;
         }
+
         public int AddMeasurement(MEASUREMENT Measure)
         {
             MEASUREMENT DBMeasure = db.MEASUREMENTS.SingleOrDefault(item => item.MeasurementTypeID == Measure.MeasurementTypeID && item.ProcessID == Measure.ProcessID);
@@ -188,8 +197,6 @@ namespace GrabIt.Controllers
                 db.SaveChanges();
             }
 
-
-           
             return Measure.ProcessID;
         }
     }
@@ -219,10 +226,7 @@ namespace GrabIt.Controllers
                     MeasurementsByCat[catsdone[item.Category]].Add(item);
 
                 }
-
             }
-
-
         }
     }
 }
