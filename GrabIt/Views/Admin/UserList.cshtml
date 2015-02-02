@@ -23,9 +23,26 @@
                         <button type="button" class="btn btn-default btn-sm" onclick="" style="margin-left:10px;">
                             <span class="glyphicon glyphicon-edit"></span> Edit User
                         </button>
-                        <button type="button" class="btn btn-default btn-sm" onclick="showDeleteWarn('@item.Email');" style="margin-left:10px;">
-                            <span class="glyphicon glyphicon-trash"></span> Delete User
-                        </button>
+
+                        @*@if(@item.Deleted == null){
+                            @item.Deleted = 'false';
+                        }*@
+
+                        @if (@item.Deleted == true)
+                        {
+                            <button type="button" class="btn btn-default btn-sm" onclick="showDeleteWarn('@item.Email', @item.Deleted);" style="margin-left:10px;">
+                                <span class="glyphicon glyphicon-off" style="color:red;"></span> Enable User
+                            </button>
+                        }
+                        else
+                        {
+
+                            <button type="button" class="btn btn-default btn-sm" onclick="showDeleteWarn('@item.Email', false);" style="margin-left:10px;">
+                                <span class="glyphicon glyphicon-off" style="color: green;"></span> Disable User
+                            </button>
+
+                        }
+
                     </td>
                 </tr>
             }
@@ -39,9 +56,19 @@
         });
     });
 
-    function showDeleteWarn(email) {
+    function showDeleteWarn(email, deleted) {
+        debugger;
+        var message = 'Are You sure you want restrict the user ' + email + '?';
+        var url = '@(Url.Action("LockUser", "Account"))';
+
+        if(deleted){
+            message = 'Are You sure you want to re enable the user ' + email + '?';
+            url = '@(Url.Action("UnlockUser", "Account"))';
+        }
+
+
         BootstrapDialog.show({
-            message: 'Are You sure you want to delete the user ' + email + '?',
+            message: message,
             buttons: [{
                 label: 'Cancel',
                 cssClass: 'btn-primary',
@@ -51,6 +78,25 @@
             }, {
                 label: 'OK',
                 action: function (dialogRef) {
+                    //call to restrict the user from using the system
+
+
+                    $.ajax({
+                        url: url,
+                        data: { username: email },
+                        contentType: 'application/json',
+                        success: function () {
+                            
+                          
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            console.log(thrownError);
+                          
+                        }
+                    });
+
+
+
                     dialogRef.close();
                 }
             }],

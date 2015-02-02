@@ -116,7 +116,6 @@ namespace GrabIt.Controllers
         public JsonResult GetMeasurementsList(int ProcessTypeID)
         {
 
-
             List<MEASUREMENTVIEW> items = db.MEASUREMENTVIEWs.Where(item => item.ProcessTypeID == ProcessTypeID).ToList();
             foreach (MEASUREMENTVIEW mes in items)
             {

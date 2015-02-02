@@ -44,7 +44,30 @@ namespace GrabIt.Controllers
            
             return View();
         }
+        //this will lock the user account and restrict access
+        public JsonResult LockUser(string username)
+        {
 
+            AspNetUser user = db.AspNetUsers.Where(item => item.UserName == username).SingleOrDefault();
+
+            user.Deleted = true;
+            db.SaveChanges();
+            return Json(user.Deleted, JsonRequestBehavior.AllowGet);
+
+        
+        }
+        //this will unlock the user account and restore access to the system
+        public JsonResult UnlockUser(string username)
+        {
+            
+            AspNetUser user = db.AspNetUsers.Where(item => item.UserName == username).SingleOrDefault();
+
+            user.Deleted = false;
+            db.SaveChanges();
+            return Json(user.Deleted, JsonRequestBehavior.AllowGet);
+
+
+        }
 
         [AllowAnonymous]
         public ActionResult CreateUser(string returnUrl)
@@ -154,6 +177,11 @@ namespace GrabIt.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
+            AspNetUser user = db.AspNetUsers.Where(item => item.UserName == model.Email).SingleOrDefault();
+            if (user.Deleted == true)
+            {
+                return View("Lockout");
+            }
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
