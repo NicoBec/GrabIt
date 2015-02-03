@@ -41,7 +41,7 @@ namespace GrabIt.Controllers
         [AllowAnonymous]
         public ActionResult AddMoreUser(string returnUrl)
         {
-           
+
             return View();
         }
         //this will lock the user account and restrict access
@@ -49,17 +49,23 @@ namespace GrabIt.Controllers
         {
 
             AspNetUser user = db.AspNetUsers.Where(item => item.UserName == username).SingleOrDefault();
+            if (user != null)
+            {
+                user.Deleted = true;
+                db.SaveChanges();
 
-            user.Deleted = true;
-            db.SaveChanges();
-            return Json(user.Deleted, JsonRequestBehavior.AllowGet);
+                return Json(user.Deleted, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
 
-        
         }
         //this will unlock the user account and restore access to the system
         public JsonResult UnlockUser(string username)
         {
-            
+
             AspNetUser user = db.AspNetUsers.Where(item => item.UserName == username).SingleOrDefault();
 
             user.Deleted = false;
@@ -127,7 +133,7 @@ namespace GrabIt.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-             return PartialView("CreateUser", model);
+            return PartialView("CreateUser", model);
         }
 
 

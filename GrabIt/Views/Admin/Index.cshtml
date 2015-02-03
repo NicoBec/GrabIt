@@ -18,9 +18,12 @@
     @Html.Action("CreateUser", "Account")
 </div>
 
-<div>
-   
-    @Html.Action("UserList", "Admin")
+<div class="container">
+    <div class="row">
+        <div class="col-md-10" id="UserListDiv">
+            @Html.Action("UserList", "Admin")
+        </div>
+    </div>
 </div>
 
 
