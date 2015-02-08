@@ -18,6 +18,13 @@ namespace GrabIt.Controllers
         public ActionResult UserList()
         {
             List<GrabIt.Models.AspNetUser> model = db.AspNetUsers.ToList();
+            List<GrabIt.Models.USER> UserList = new List<USER>();
+            foreach (GrabIt.Models.AspNetUser usr in model)
+            {
+                UserList.Add(db.USERS.Where(item => item.UserNetID == usr.Id).SingleOrDefault());
+            }
+
+            ViewBag.Users = UserList;
 
             return View(model);
         }

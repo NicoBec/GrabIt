@@ -7,6 +7,8 @@
 </style>
 
 
+
+
 <div class="container" style="padding-bottom: 50px;">
     <div class="row">
         <div class="col-md-10">
@@ -44,6 +46,7 @@
                                         @item.Deleted = 'false';
                                     }*@
 
+                                @*this will display the enable Disable user buttons*@
                                 @if (@item.Deleted == true)
                                 {
                                     <button type="button" class="btn btn-default btn-sm" onclick="showDeleteWarn('@item.Email', @item.Deleted);" style="margin-left:10px;">
@@ -58,21 +61,42 @@
                                     </button>
 
                                 }
+
                                 <div style="display: none;" id='@divname'>
-                                    <div class="container">
-                                        <div class="row">
-                                            
-                                            <fieldset style="margin-top: -120px;margin-bottom: -80px;">
-                                                <h3 style="margin-bottom: -20px;">@item.Email</h3>
-                                                <div class="form-group">
-                                                    <label class="col-md-6 control-label" for="UserName">User Name</label>
-                                                        <input class="form-control col-md-6" data-val="true" data-val-length="" data-val-length-max="100" data-val-length-min="6" data-val-required="The Password field is required." id="UserName" name="UserName" type="text" value="@item.Email">
+                                    <div style=" position: relative; height: 100%;">
+                                        <div class="container">
+                                            <div class="row">
+
+                                                <fieldset style="">
+                                                    <h3 style="">@item.Email</h3>
+                                                    <div class="form-group">
+                                                        <label class="col-md-6 control-label" style="margin-top: 20px;" for="UserName">User Name</label>
+                                                        <input class="form-control col-md-6 usrnameinput" data-val="true" data-val-length="" data-val-length-max="100" data-val-length-min="6" data-val-required="The Password field is required." id="UserName" name="UserName" type="text" value="@ViewBag.Users[counter - 1].UserName">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="col-md-6 control-label" style="margin-top: 20px;" for="Password">Password</label>
+                                                        <input class="form-control col-md-6 usrpasswordinput" data-val="true" data-val-length="The Password must be at least 6 characters long." data-val-length-max="100" data-val-length-min="6" data-val-required="The Password field is required." id="Password" name="Password" type="password" placeholder="Leave Blank To Ignore">
+                                                    </div>
+
+
+                                                </fieldset>
+
+                                            </div>
+                                        </div>
+                                        <div class="container" style="height: 50px;width: 100%; position: absolute; bottom: 0;">
+                                            <div class="row col-sm-12">
+                                                <div class="form-group  col-sm-4 pull-right">
+                                                    <button type="button" class="btn btn-default btn-sm" onclick="saveUserInfo('@divname')" style="margin-left:10px;">
+                                                        <span class="glyphicon glyphicon-save"></span> Save
+                                                    </button>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label class="col-md-6 control-label" for="Password">Password</label>
-                                                    <input class="form-control col-md-6" data-val="true" data-val-length="The Password must be at least 6 characters long." data-val-length-max="100" data-val-length-min="6" data-val-required="The Password field is required." id="Password" name="Password" type="password" placeholder="Leave Blank To Ignore">
+                                                <div class="form-group col-sm-4 pull-right">
+                                                    <button type="button" class="btn btn-default btn-sm" onclick="closePopup('@divname');" style="margin-left:10px;">
+                                                        <span class="glyphicon glyphicon-remove"></span> Close
+                                                    </button>
                                                 </div>
-                                            </fieldset>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -141,43 +165,27 @@
     function showDetailsDiv(id) {
         var htm = $("#userDetail" + id).html();
 
-        BootstrapDialog.show({
-            message: htm,
-            buttons: [{
-                label: 'Cancel',
-                action: function (dialogRef) {
-                    dialogRef.close();
-                }
-            }, {
-                label: 'Save',
-                cssClass: 'btn-primary',
-                action: function (dialogRef) {
-                    //call to restrict the user from using the system
-
-
-
-                    $.ajax({
-                        url: url,
-                        data: { username: email },
-                        contentType: 'application/json',
-                        success: function () {
-                            $("#UserListDiv").load('@Url.Action("UserList", "Admin")');
-
-                        },
-                        error: function (xhr, ajaxOptions, thrownError) {
-                            console.log(thrownError);
-
-                        }
-                    });
-                    dialogRef.close();
-                }
-            }],
-            type: BootstrapDialog.TYPE_INFO,
-            closable: true,
+        $("#userDetail" + id).dialog({
+            open: addCloseBtn,
+            title: "Edit User Info",
+            width: 400,
+            height: 400,
         });
+
     }
 
+    function addCloseBtn() {
+        var closeBtn = $('.ui-dialog-titlebar-close');
+        closeBtn.append('<span class="ui-button-icon-primary ui-icon ui-icon-closethick" style="margin-top: -1px; margin-left: -1.5px;"></span><span class="ui-button-text">close</span>');
+    }
+    function closePopup(id) {
+        $("#" + id).dialog('destroy');
+    }
+    function saveUserInfo(id) {
+        console.log($("#" + id + " .usrpasswordinput").val());
+        console.log($("#" + id + " .usrnameinput").val());
 
+    }
 
 
 </script>

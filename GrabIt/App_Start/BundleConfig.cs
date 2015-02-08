@@ -46,10 +46,8 @@ namespace GrabIt
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                  "~/Content/bootstrap.css",
-                 "~/Scripts/jquery-ui-1.11.2.custom/jquery-ui.css",
                  "~/Content/dataTables.bootstrap.css",
                   "~/Content/jquery.dataTables.css",
-                  "~/Scripts/jquery-ui-1.11.2.custom/jquery-ui.theme.css",
                   "~/Content/bootstrap-timepicker.css",
                   "~/Content/bootstrapValidator.css",
                   "~/Content/bootstrap-dialog.css",
