@@ -21,6 +21,7 @@
                         <th>
                             @Html.DisplayNameFor(model => model.Email)
                         </th>
+                        <th>Users Name</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -32,78 +33,87 @@
 
                     @foreach (var item in Model)
                     {
-                        divname = "userDetail" + counter.ToString();
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Email)
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-default btn-sm" onclick="showDetailsDiv(@counter)" style="margin-left:10px;">
-                                    <span class="glyphicon glyphicon-edit"></span> Edit User
-                                </button>
-
-                                @*@if(@item.Deleted == null){
-                                        @item.Deleted = 'false';
-                                    }*@
-
-                                @*this will display the enable Disable user buttons*@
-                                @if (@item.Deleted == true)
-                                {
-                                    <button type="button" class="btn btn-default btn-sm" onclick="showDeleteWarn('@item.Email', @item.Deleted);" style="margin-left:10px;">
-                                        <span class="glyphicon glyphicon-off" style="color:red;"></span> Enable User
-                                    </button>
-                                }
-                                else
-                                {
-
-                                    <button type="button" class="btn btn-default btn-sm" onclick="showDeleteWarn('@item.Email', false);" style="margin-left:10px;">
-                                        <span class="glyphicon glyphicon-off" style="color: green;"></span> Disable User
+                        if (@ViewBag.Users[counter - 1] != null)
+                        {
+                            divname = "userDetail" + counter.ToString();
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Email)
+                                </td>
+                                <td>
+                                    <span> @ViewBag.Users[counter - 1].UserName.Trim()</span>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-default btn-sm" onclick="showDetailsDiv(@counter)" style="margin-left:10px;">
+                                        <span class="glyphicon glyphicon-edit"></span> Edit User
                                     </button>
 
-                                }
+                                    @*@if(@item.Deleted == null){
+                                            @item.Deleted = 'false';
+                                        }*@
 
-                                <div style="display: none;" id='@divname'>
-                                    <div style=" position: relative; height: 100%;">
-                                        <div class="container">
-                                            <div class="row">
+                                    @*this will display the enable Disable user buttons*@
+                                    @if (@item.Deleted == true)
+                                    {
+                                        <button type="button" class="btn btn-default btn-sm" onclick="showDeleteWarn('@item.Email', @item.Deleted);" style="margin-left:10px;">
+                                            <span class="glyphicon glyphicon-off" style="color:red;"></span> Enable User
+                                        </button>
+                                    }
+                                    else
+                                    {
 
-                                                <fieldset style="">
-                                                    <h3 style="">@item.Email</h3>
-                                                    <div class="form-group">
-                                                        <label class="col-md-6 control-label" style="margin-top: 20px;" for="UserName">User Name</label>
-                                                        <input class="form-control col-md-6 usrnameinput" data-val="true" data-val-length="" data-val-length-max="100" data-val-length-min="6" data-val-required="The Password field is required." id="UserName" name="UserName" type="text" value="@ViewBag.Users[counter - 1].UserName">
-                                                    </div>
+                                        <button type="button" class="btn btn-default btn-sm" onclick="showDeleteWarn('@item.Email', false);" style="margin-left:10px;">
+                                            <span class="glyphicon glyphicon-off" style="color: green;"></span> Disable User
+                                        </button>
 
-                                                    <div class="form-group">
-                                                        <label class="col-md-6 control-label" style="margin-top: 20px;" for="Password">Password</label>
-                                                        <input class="form-control col-md-6 usrpasswordinput" data-val="true" data-val-length="The Password must be at least 6 characters long." data-val-length-max="100" data-val-length-min="6" data-val-required="The Password field is required." id="Password" name="Password" type="password" placeholder="Leave Blank To Ignore">
-                                                    </div>
+                                    }
+
+                                    <div style="display: none;" id='@divname'>
+                                        <div style=" position: relative; height: 100%;">
+                                            <div class="container">
+                                                <div class="row">
+
+                                                    <fieldset style="">
+                                                        <h3 style="">@item.Email</h3>
+                                                        <div class="form-group">
+                                                            <label class="col-md-6 control-label" style="margin-top: 20px;" for="UserName">User Name</label>
+                                                            <input class="form-control col-md-6 usrnameinput" data-val="true" data-val-length="" data-val-length-max="100" data-val-length-min="6" data-val-required="The Password field is required." id="UserName" name="UserName" type="text" value="@ViewBag.Users[counter - 1].UserName.Trim()">
+                                                            <span class="col-md-10 usrnameinputerror" style="color: red;display: none;">The Users Name field is required.</span>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="col-md-6 control-label" style="margin-top: 20px;" for="Password">Password</label>
+                                                            <input class="form-control col-md-6 usrpasswordinput" data-val="true" data-val-length="The Password must be at least 6 characters long." data-val-length-max="100" data-val-length-min="6" data-val-required="The Password field is required." id="Password" name="Password" type="password" placeholder="Leave Blank To Ignore">
+                                                            <span class="col-md-10 usrpasswordinputerror" style="color: red; display: none;">The Password must be at least 6 characters long.</span>
+                                                        </div>
 
 
-                                                </fieldset>
+                                                    </fieldset>
 
-                                            </div>
-                                        </div>
-                                        <div class="container" style="height: 50px;width: 100%; position: absolute; bottom: 0;">
-                                            <div class="row col-sm-12">
-                                                <div class="form-group  col-sm-4 pull-right">
-                                                    <button type="button" class="btn btn-default btn-sm" onclick="saveUserInfo('@divname')" style="margin-left:10px;">
-                                                        <span class="glyphicon glyphicon-save"></span> Save
-                                                    </button>
                                                 </div>
-                                                <div class="form-group col-sm-4 pull-right">
-                                                    <button type="button" class="btn btn-default btn-sm" onclick="closePopup('@divname');" style="margin-left:10px;">
-                                                        <span class="glyphicon glyphicon-remove"></span> Close
-                                                    </button>
+                                            </div>
+                                            <div class="container" style="height: 50px;width: 100%; position: absolute; bottom: 0;">
+                                                <div class="row col-sm-12">
+                                                    <div class="form-group  col-sm-4 pull-right">
+                                                        <button type="button" class="btn btn-default btn-sm" onclick="saveUserInfo('@divname','@item.Email.Trim()')" style="margin-left:10px;">
+                                                            <span class="glyphicon glyphicon-save"></span> Save
+                                                        </button>
+                                                    </div>
+                                                    <div class="form-group col-sm-4 pull-right">
+                                                        <button type="button" class="btn btn-default btn-sm" onclick="closePopup('@divname');" style="margin-left:10px;">
+                                                            <span class="glyphicon glyphicon-remove"></span> Close
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                                //Counter for the id of the personal info div
-                                counter++;
+                                </td>
+                            </tr>
+                                    //Counter for the id of the personal info div
+                                   
+                        }
+                        counter++;
                     }
                 </tbody>
             </table>
@@ -181,9 +191,51 @@
     function closePopup(id) {
         $("#" + id).dialog('destroy');
     }
-    function saveUserInfo(id) {
-        console.log($("#" + id + " .usrpasswordinput").val());
-        console.log($("#" + id + " .usrnameinput").val());
+    function saveUserInfo(id, email) {
+        var usrPassword = $("#" + id + " .usrpasswordinput").val().trim();
+        var usrName = $("#" + id + " .usrnameinput").val().trim();
+        var valid = true;
+        //check if password changed
+        @*$.ajax({
+            url: url,
+            data: { UserName: usrName, Password: usrPassword },
+            contentType: 'application/json',
+            success: function () {
+                $("#UserListDiv").load('@Url.Action("updateUserInfo", "Account")');
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(thrownError);
+
+            }
+        });*@
+
+        debugger;
+        if (usrPassword.length > 0 && usrPassword.length < 6) {
+            valid = false;
+            $("#" + id + " .usrpasswordinputerror").show('slow');
+        }else{
+            $("#" + id + " .usrpasswordinputerror").hide('slow');
+        }
+
+        if (usrName === "") {
+            valid = false;
+            $("#" + id + " .usrnameinputerror").show('slow');
+        }else{
+            $("#" + id + " .usrnameinputerror").hide('slow');
+        }
+
+
+        if (valid) {
+            $.post('@Url.Action("updateUserInfo", "Account")', { Email: email, UserName: usrName, Password: usrPassword }, function () {
+                $("#UserListDiv").load('@Url.Action("UserList", "Admin")');
+                closePopup(id);
+            })
+        }
+   
+            
+       
+
 
     }
 

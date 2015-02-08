@@ -27,6 +27,40 @@ namespace GrabIt.Controllers
             SignInManager = signInManager;
         }
 
+        //Reset the user Password and info from the admin page
+        [HttpPost]
+        public JsonResult updateUserInfo(string Email, string UserName, string Password)
+        {
+
+            AspNetUser User = db.AspNetUsers.Where(item => item.UserName == Email).SingleOrDefault();
+
+            if (Password != "")
+            {
+                UserManager.RemovePassword(User.Id);
+
+                UserManager.AddPassword(User.Id, Password);
+            
+            }
+
+
+            if (UserName != "")
+            {
+                USER usr = db.USERS.Where(item => item.UserNetID == User.Id).SingleOrDefault();
+                usr.UserName = UserName;
+                db.SaveChanges();
+
+            }
+            else
+            {
+
+            }
+
+
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+
+        }
+
+
         public ApplicationUserManager UserManager
         {
             get
