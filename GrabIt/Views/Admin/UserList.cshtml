@@ -110,13 +110,32 @@
                                     </div>
                                 </td>
                             </tr>
-                                    //Counter for the id of the personal info div
-                                   
+                            //Counter for the id of the personal info div
+
                         }
                         counter++;
                     }
                 </tbody>
+
             </table>
+            <div id="ConfirmDisable">
+                <div class="container" style="">
+                    <p id="confirmDisablehead"></p>
+                    <div class="row col-sm-12">
+                        <div class="form-group  col-sm-4 pull-right">
+                            <button type="button" class="btn btn-default btn-sm" onclick="" style="margin-left:10px;">
+                                <span class="glyphicon glyphicon-save"></span> Cancel
+                            </button>
+                        </div>
+                        <div class="form-group col-sm-4 pull-right">
+                            <button type="button" class="btn btn-default btn-sm" onclick="" style="margin-left:10px;">
+                                <span class="glyphicon glyphicon-remove"></span> OK
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 </div>
@@ -126,54 +145,69 @@
             "order": [0, 'desc']
         });
     });
-
+    var resEmail = "";
     function showDeleteWarn(email, deleted) {
         var message = 'Are You sure you want restrict the user ' + email + '?';
+
+        resEmail = email;
+
+        $("#confirmDisablehead").html(message);
+        $("#ConfirmDisable").dialog({
+            open: addCloseBtn,
+            title: "Warning!",
+            width: 400,
+            height: 200,
+        });
+
+
+
+        //BootstrapDialog.show({
+        //    message: message,
+        //    buttons: [{
+        //        label: 'Cancel',
+        //        cssClass: 'btn-primary',
+        //        action: function (dialogRef) {
+        //            dialogRef.close();
+        //        }
+        //    }, {
+        //        label: 'OK',
+        //        action:
+        //        }],
+        //    type: BootstrapDialog.TYPE_WARNING,
+        //    closable: true,
+        //});
+    }
+
+    function restrictUser(dialogRef) {
         var url = '@(Url.Action("LockUser", "Account"))';
 
         if (deleted) {
             message = 'Are You sure you want to re enable the user ' + email + '?';
             url = '@(Url.Action("UnlockUser", "Account"))';
         }
+        //call to restrict the user from using the system
+        if(resEmail =)
+        $.ajax({
+            url: url,
+            data: { username: resEmail },
+            contentType: 'application/json',
+            success: function () {
 
 
-        BootstrapDialog.show({
-            message: message,
-            buttons: [{
-                label: 'Cancel',
-                cssClass: 'btn-primary',
-                action: function (dialogRef) {
-                    dialogRef.close();
-                }
-            }, {
-                label: 'OK',
-                action: function (dialogRef) {
-                    //call to restrict the user from using the system
-                    $.ajax({
-                        url: url,
-                        data: { username: email },
-                        contentType: 'application/json',
-                        success: function () {
-                            $("#UserListDiv").load('@Url.Action("UserList", "Admin")');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(thrownError);
 
-                        },
-                        error: function (xhr, ajaxOptions, thrownError) {
-                            console.log(thrownError);
-
-                        }
-                    });
-
-
-
-                    dialogRef.close();
-                }
-            }],
-            type: BootstrapDialog.TYPE_WARNING,
-            closable: true,
+            }
         });
+
+
+
+        dialogRef.close();
     }
+
+
     function showDetailsDiv(id) {
-        var htm = $("#userDetail" + id).html();
 
         $("#userDetail" + id).dialog({
             open: addCloseBtn,
@@ -190,6 +224,7 @@
     }
     function closePopup(id) {
         $("#" + id).dialog('destroy');
+        resEmail = "";
     }
     function saveUserInfo(id, email) {
         var usrPassword = $("#" + id + " .usrpasswordinput").val().trim();
@@ -232,9 +267,9 @@
                 closePopup(id);
             })
         }
-   
-            
-       
+
+
+
 
 
     }
