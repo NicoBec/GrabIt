@@ -486,6 +486,7 @@
     <Content Include="Scripts\app\common.js" />
     <Content Include="Scripts\app\home.viewmodel.js" />
     <Content Include="SQLScripts\DBExport.sql" />
+    <Content Include="SQLScripts\Drop Create5.sql" />
     <Content Include="SQLScripts\Drop Create 1.sql" />
     <Content Include="SQLScripts\Drop Create 2.sql" />
     <Content Include="SQLScripts\Drop Create 3.sql" />
