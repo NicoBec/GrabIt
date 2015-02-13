@@ -29,7 +29,7 @@ namespace GrabIt.Controllers
 
         //Reset the user Password and info from the admin page
         [HttpPost]
-        public JsonResult updateUserInfo(string Email, string UserName, string Password)
+        public JsonResult updateUserInfo(string Email, string UserName, string Password, int UserType)
         {
 
             AspNetUser User = db.AspNetUsers.Where(item => item.UserName == Email).SingleOrDefault();
@@ -47,6 +47,9 @@ namespace GrabIt.Controllers
             {
                 USER usr = db.USERS.Where(item => item.UserNetID == User.Id).SingleOrDefault();
                 usr.UserName = UserName;
+                if(UserType != 0){
+                    usr.Enabled = UserType;
+                }
                 db.SaveChanges();
 
             }
@@ -54,6 +57,9 @@ namespace GrabIt.Controllers
             {
 
             }
+
+            
+
 
 
             return Json(new { }, JsonRequestBehavior.AllowGet);
@@ -155,8 +161,9 @@ namespace GrabIt.Controllers
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
                     ViewBag.Done = "The User has Been added.";
                     ViewBag.Added = true;
+                    ViewBag.UserType = null;
                     model = new RegisterViewModel();
-                    return PartialView("CreateUser");
+                    return PartialView("CreateUser", model);
                     //return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
@@ -228,6 +235,7 @@ namespace GrabIt.Controllers
 
 
                 case SignInStatus.Success:
+
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");

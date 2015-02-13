@@ -23,9 +23,11 @@
             success: function (response) {
                 //do something with response
                 $("#newUser").html(response);
+                $("#UserListDiv").load('@Url.Action("UserList", "Admin")');
 
             }
         });
+       
         return false;// if it's a link to prevent post
     }
 
@@ -34,9 +36,25 @@
         if (t !== "") {
             $("#UserType").val(t);
         }
-    })
-</script>
 
+
+    })
+
+
+
+
+
+</script>
+@if (ViewBag.Added != null && ViewBag.Added)
+{
+    <script>
+        $(function () {
+            $("#Email").val("");
+            $("#UsersName").val("");
+        });
+
+    </script>
+}
 
 
 @using (Ajax.BeginForm("CreateUser", "Account",

@@ -344,6 +344,7 @@
     <Content Include="Content\images\bg.png" />
     <Content Include="Content\images\grid-18px-masked.png" />
     <Content Include="Content\images\LargoLogo.gif" />
+    <Content Include="Content\images\ShapeTMLogo.JPG" />
     <Content Include="Content\images\sort_both.png" />
     <Content Include="Content\jquery.dataTables.css" />
     <Content Include="Content\Site.css" />

@@ -22,6 +22,7 @@
                             @Html.DisplayNameFor(model => model.Email)
                         </th>
                         <th>Users Name</th>
+                        <th>User Type</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -29,6 +30,7 @@
                     @{
                         int counter = 1;
                         string divname = "";
+                        int enabled = 0;
                     }
 
                     @foreach (var item in Model)
@@ -36,6 +38,11 @@
                         if (@ViewBag.Users[counter - 1] != null)
                         {
                             divname = "userDetail" + counter.ToString();
+                            if (@ViewBag.Users[counter - 1].Enabled != null)
+                            {
+                                enabled = @ViewBag.Users[counter - 1].Enabled;
+                            }
+
                             <tr>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Email)
@@ -44,11 +51,22 @@
                                     <span> @ViewBag.Users[counter - 1].UserName.Trim()</span>
                                 </td>
                                 <td>
+                                    @foreach (var usrType in @ViewBag.UserType)
+                                    {
+                                        if (enabled.ToString() == usrType.Id)
+                                        {
+                                            <span>@usrType.Name</span>
+                                        }
+
+                                    }
+                                </td>
+
+                                <td>
                                     <button type="button" class="btn btn-default btn-sm" onclick="showDetailsDiv(@counter)" style="margin-left:10px;">
                                         <span class="glyphicon glyphicon-edit"></span> Edit User
                                     </button>
 
-                                   
+
                                     @*this will display the enable Disable user buttons*@
                                     @if (@item.Deleted == true)
                                     {
@@ -83,6 +101,37 @@
                                                             <input class="form-control col-md-6 usrpasswordinput" data-val="true" data-val-length="The Password must be at least 6 characters long." data-val-length-max="100" data-val-length-min="6" data-val-required="The Password field is required." id="Password" name="Password" type="password" placeholder="Leave Blank To Ignore">
                                                             <span class="col-md-10 usrpasswordinputerror" style="color: red; display: none;">The Password must be at least 6 characters long.</span>
                                                         </div>
+                                                        <div class="form-group">
+                                                            <label class="col-md-6 control-label" style="margin-top: 20px;" for="UserType">User Type</label>
+                                                            @*   <div class="col-md-6">*@
+                                                            <select class="form-control col-md-6 usrtypeinput" id="UserType" name="UserType" required="required">
+                                                                <option value="0"></option>
+
+                                                                @foreach (var usrType in @ViewBag.UserType)
+                                                                {
+
+                                                                    if (enabled.ToString() == usrType.Id)
+                                                                    {
+                                                                        <option value="@usrType.Id" selected>@usrType.Name</option>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <option value="@usrType.Id">@usrType.Name</option>
+                                                                    }
+
+
+                                                                }
+                                                            </select>
+
+
+
+                                                            <span class="col-md-10 usrtypeinputerror" style="color: red; display: none;">Please select a user type.</span>
+                                                            @*</div>*@
+                                                        </div>
+
+
+
+
 
 
                                                     </fieldset>
@@ -111,8 +160,11 @@
 
                         }
                         counter++;
+                        enabled = 0;
                     }
                 </tbody>
+
+
 
             </table>
             <div style="display: none;">
@@ -158,7 +210,7 @@
             width: 400,
             height: 200,
         });
-        
+
 
     }
 
@@ -196,7 +248,7 @@
             open: addCloseBtn,
             title: "Edit User Info",
             width: 400,
-            height: 400,
+            height: 450,
         });
 
     }
@@ -212,8 +264,12 @@
     function saveUserInfo(id, email) {
         var usrPassword = $("#" + id + " .usrpasswordinput").val().trim();
         var usrName = $("#" + id + " .usrnameinput").val().trim();
+        var usrType = $("#" + id + " .usrtypeinput").val().trim();
+
+        debugger;
+
         var valid = true;
-      
+
 
         if (usrPassword.length > 0 && usrPassword.length < 6) {
             valid = false;
@@ -229,9 +285,16 @@
             $("#" + id + " .usrnameinputerror").hide('slow');
         }
 
+        if (usrType == 0) {
+            valid = false;
+            $("#" + id + " .usrtypeinputerror").show('slow');
+        } else {
+            $("#" + id + " .usrtypeinputerror").hide('slow');
+        }
+
 
         if (valid) {
-            $.post('@Url.Action("updateUserInfo", "Account")', { Email: email, UserName: usrName, Password: usrPassword }, function () {
+            $.post('@Url.Action("updateUserInfo", "Account")', { Email: email, UserName: usrName, Password: usrPassword, UserType: usrType }, function () {
                 $("#UserListDiv").load('@Url.Action("UserList", "Admin")');
                 closePopup(id);
             })
