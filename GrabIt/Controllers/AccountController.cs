@@ -12,7 +12,7 @@ using GrabIt.Models;
 
 namespace GrabIt.Controllers
 {
-    [Authorize]
+   
     public class AccountController : Controller
     {
         private ApplicationUserManager _userManager;
@@ -189,6 +189,8 @@ namespace GrabIt.Controllers
             AuthenticationManager.SignIn(identity);
             return new EmptyResult();
         }
+
+        [AllowAnonymous]
         public ActionResult getAdminLink()
         {
             ViewBag.showLink = true;
@@ -196,7 +198,7 @@ namespace GrabIt.Controllers
             USER usr = db.USERS.Where(item => item.UserNetID == userGuid).SingleOrDefault();
             if (usr == null || usr.Enabled != 1)
             {
-                ViewBag.showLink = false;
+                return new EmptyResult();
             }
             return PartialView("getAdminLink");
         }

@@ -40,11 +40,11 @@ namespace GrabIt.Controllers
             }
         }
 
-        // GET api/Me
-        public GetViewModel Get()
-        {
-            var user = UserManager.FindById(User.Identity.GetUserId());
-            return new GetViewModel() { Hometown = user.Hometown };
-        }
+        //// GET api/Me
+        //public GetViewModel Get()
+        //{
+        //    var user = UserManager.FindById(User.Identity.GetUserId());
+        //    return new GetViewModel() { Hometown = user.Hometown };
+        //}
     }
 }
