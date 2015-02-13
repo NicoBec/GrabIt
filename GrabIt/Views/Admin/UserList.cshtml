@@ -48,10 +48,7 @@
                                         <span class="glyphicon glyphicon-edit"></span> Edit User
                                     </button>
 
-                                    @*@if(@item.Deleted == null){
-                                            @item.Deleted = 'false';
-                                        }*@
-
+                                   
                                     @*this will display the enable Disable user buttons*@
                                     @if (@item.Deleted == true)
                                     {
@@ -118,23 +115,25 @@
                 </tbody>
 
             </table>
-            <div id="ConfirmDisable">
-                <div class="container" style="">
-                    <p id="confirmDisablehead"></p>
-                    <div class="row col-sm-12">
-                        <div class="form-group  col-sm-4 pull-right">
-                            <button type="button" class="btn btn-default btn-sm" onclick="" style="margin-left:10px;">
-                                <span class="glyphicon glyphicon-save"></span> Cancel
-                            </button>
-                        </div>
-                        <div class="form-group col-sm-4 pull-right">
-                            <button type="button" class="btn btn-default btn-sm" onclick="" style="margin-left:10px;">
-                                <span class="glyphicon glyphicon-remove"></span> OK
-                            </button>
+            <div style="display: none;">
+                <div id="ConfirmDisable">
+                    <div class="container" style="">
+                        <p id="confirmDisablehead"></p>
+                        <div class="row col-sm-8" style="width: 90%; position: absolute;bottom: 0;">
+                            <div class="form-group  col-sm-4 pull-right">
+                                <button type="button" class="btn btn-default btn-sm" onclick="$('#ConfirmDisable').dialog('destroy');" style="margin-left:10px;">
+                                    <span class="glyphicon glyphicon-remove"></span> Cancel
+                                </button>
+                            </div>
+                            <div class="form-group col-sm-4 pull-right">
+                                <button type="button" class="btn btn-default btn-sm" onclick="restrictUser(this); " style="margin-left:10px;">
+                                    <span class="glyphicon glyphicon-save"></span> OK
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
 
+                </div>
             </div>
         </div>
     </div>
@@ -146,9 +145,10 @@
         });
     });
     var resEmail = "";
+    var glbDeleted = false;
     function showDeleteWarn(email, deleted) {
         var message = 'Are You sure you want restrict the user ' + email + '?';
-
+        glbDeleted = deleted;
         resEmail = email;
 
         $("#confirmDisablehead").html(message);
@@ -158,52 +158,35 @@
             width: 400,
             height: 200,
         });
+        
 
-
-
-        //BootstrapDialog.show({
-        //    message: message,
-        //    buttons: [{
-        //        label: 'Cancel',
-        //        cssClass: 'btn-primary',
-        //        action: function (dialogRef) {
-        //            dialogRef.close();
-        //        }
-        //    }, {
-        //        label: 'OK',
-        //        action:
-        //        }],
-        //    type: BootstrapDialog.TYPE_WARNING,
-        //    closable: true,
-        //});
     }
 
     function restrictUser(dialogRef) {
         var url = '@(Url.Action("LockUser", "Account"))';
 
-        if (deleted) {
-            message = 'Are You sure you want to re enable the user ' + email + '?';
+        if (glbDeleted) {
             url = '@(Url.Action("UnlockUser", "Account"))';
         }
         //call to restrict the user from using the system
-        if(resEmail =)
-        $.ajax({
-            url: url,
-            data: { username: resEmail },
-            contentType: 'application/json',
-            success: function () {
+        if (resEmail) {
+            $.ajax({
+                url: url,
+                data: { username: resEmail },
+                contentType: 'application/json',
+                success: function () {
+                    $("#UserListDiv").load('@Url.Action("UserList", "Admin")');
+
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log(thrownError);
+
+                }
+            });
+        }
 
 
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                console.log(thrownError);
-
-            }
-        });
-
-
-
-        dialogRef.close();
+        $('#ConfirmDisable').dialog('destroy');
     }
 
 
@@ -230,33 +213,19 @@
         var usrPassword = $("#" + id + " .usrpasswordinput").val().trim();
         var usrName = $("#" + id + " .usrnameinput").val().trim();
         var valid = true;
-        //check if password changed
-        @*$.ajax({
-            url: url,
-            data: { UserName: usrName, Password: usrPassword },
-            contentType: 'application/json',
-            success: function () {
-                $("#UserListDiv").load('@Url.Action("updateUserInfo", "Account")');
+      
 
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                console.log(thrownError);
-
-            }
-        });*@
-
-        debugger;
         if (usrPassword.length > 0 && usrPassword.length < 6) {
             valid = false;
             $("#" + id + " .usrpasswordinputerror").show('slow');
-        }else{
+        } else {
             $("#" + id + " .usrpasswordinputerror").hide('slow');
         }
 
         if (usrName === "") {
             valid = false;
             $("#" + id + " .usrnameinputerror").show('slow');
-        }else{
+        } else {
             $("#" + id + " .usrnameinputerror").hide('slow');
         }
 
@@ -267,10 +236,6 @@
                 closePopup(id);
             })
         }
-
-
-
-
 
     }
 

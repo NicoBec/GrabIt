@@ -26,7 +26,7 @@ namespace GrabIt.Controllers
 
             ViewBag.Users = UserList;
 
-            return View(model);
+            return PartialView("UserList",model);
         }
        
 
