@@ -189,7 +189,17 @@ namespace GrabIt.Controllers
             AuthenticationManager.SignIn(identity);
             return new EmptyResult();
         }
-
+        public ActionResult getAdminLink()
+        {
+            ViewBag.showLink = true;
+            string userGuid = User.Identity.GetUserId();
+            USER usr = db.USERS.Where(item => item.UserNetID == userGuid).SingleOrDefault();
+            if (usr == null || usr.Enabled != 1)
+            {
+                ViewBag.showLink = false;
+            }
+            return PartialView("getAdminLink");
+        }
         //
         // GET: /Account/Login
         [AllowAnonymous]

@@ -44,7 +44,7 @@
                    
                     <li>@Html.ActionLink("DataInput", "Index", "DataInput", new { area = "" }, null)</li>
                     <li>@Html.ActionLink("DownTime", "Index", "DownTime", new { area = "" }, null)</li>
-                    <li>@Html.ActionLink("Admin", "Index", "Admin", new { area = "" }, null)</li>
+                    @Html.Action("getAdminLink", "Account")
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
