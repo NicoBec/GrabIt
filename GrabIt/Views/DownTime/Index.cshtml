@@ -5,14 +5,25 @@
 }
 
 <h2>Downtime</h2>
-
+@MyHelpers.PageLogos()
 <script type="text/javascript">
     $(document).ready(function () {
         $('#TblDownTime').dataTable({
             "order": [0, 'desc']
         });
     });
+    function scrollto(){
+        var Tag = $("#BtnAddDowntime")
+
+        $('html,body').animate({scrollTop: Tag.offset().top}, 'slow');
+
+    }
+
+
+
+
 </script>
+<input onclick="scrollto();" type="button" class="btn btn-default" value="Add">
 <br />
 <table id="TblDownTime" class="table table-striped table-bordered" cellspacing="0" width="100%" style="font-size: 11px;">
     <thead>

@@ -36,13 +36,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("GrabIT", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @*@Html.ActionLink("GrabIT", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
                    
-                    <li>@Html.ActionLink("DataInput", "Index", "DataInput", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Lab Results", "Index", "DataInput", new { area = "" }, null)</li>
                     <li>@Html.ActionLink("DownTime", "Index", "DownTime", new { area = "" }, null)</li>
                     @Html.Action("getAdminLink", "Account")
                 </ul>
@@ -55,7 +55,7 @@
         @RenderSection("SPAViews", required: false)
         <hr />
         <footer>
-            <p>&copy; ShapeTM @DateTime.Now.Year</p>
+            <p>Prodman by Shape&trade;</p>
         </footer>
     </div>
 
